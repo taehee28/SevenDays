@@ -1,16 +1,24 @@
 package com.thk.sevendays.ui
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import com.thk.sevendays.ui.components.ChallengeList
 
-val titleList = listOf<String>("title 1", "title 2", "title 3", "title 4")
+val titleList = List(10) { index -> "title $index" }
 
 @Composable
 fun SevenDaysScreen() {
-    Scaffold() {
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(onClick = { /*TODO*/ }) {
+            Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+        }
+    }) {
         ChallengeList(challenges = titleList)
     }
 }

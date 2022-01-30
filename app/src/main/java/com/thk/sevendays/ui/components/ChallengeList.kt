@@ -1,6 +1,7 @@
 package com.thk.sevendays.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,7 +17,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ChallengeList(challenges: List<String>) {
-    LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp), modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxHeight()) {
         items(items = challenges) { title ->
             ChallengeCard(title = title)
         }
@@ -28,8 +29,9 @@ private fun ChallengeCard(title: String) {
     Card(
         elevation = 3.dp,
         modifier = Modifier
-            .padding(top = 16.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth()
+            .clickable {  }
     ) {
         CardContent(title)
     }
