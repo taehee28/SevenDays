@@ -23,12 +23,17 @@ class MainActivity : ComponentActivity() {
             SevenDaysTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    SevenDaysScreen(
-                        challenges = challengeViewModel.challenges,
-                        onAddChallenge = challengeViewModel::addChallenge
-                    )
+                    SevenDaysActivityScreen(challengeViewModel = challengeViewModel)           
                 }
             }
         }
+    }
+    
+    @Composable
+    private fun SevenDaysActivityScreen(challengeViewModel: ChallengeViewModel) {
+        SevenDaysScreen(
+            challenges = challengeViewModel.challenges,
+            onAddChallenge = challengeViewModel::addChallenge
+        )
     }
 }
