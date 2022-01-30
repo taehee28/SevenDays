@@ -14,18 +14,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.thk.sevendays.data.Challenge
+import java.time.LocalDate
 
 @Composable
-fun ChallengeList(challenges: List<String>) {
+fun ChallengeList(challenges: List<Challenge>) {
     LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxHeight()) {
-        items(items = challenges) { title ->
-            ChallengeCard(title = title)
+        items(items = challenges) { challenge ->
+            ChallengeCard(challenge = challenge)
         }
     }
 }
 
 @Composable
-private fun ChallengeCard(title: String) {
+private fun ChallengeCard(challenge: Challenge) {
     Card(
         elevation = 3.dp,
         modifier = Modifier
@@ -33,19 +35,19 @@ private fun ChallengeCard(title: String) {
             .fillMaxWidth()
             .clickable {  }
     ) {
-        CardContent(title)
+        CardContent(challenge)
     }
 }
 
 @Composable
-private fun CardContent(title: String) {
+private fun CardContent(challenge: Challenge) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.padding(16.dp)
     ) {
         Column() {
-            Text(text = title, style = MaterialTheme.typography.h5)
+            Text(text = challenge.title, style = MaterialTheme.typography.h5)
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = "00.00 ~ 00.00", style = MaterialTheme.typography.body2, modifier = Modifier.alpha(ContentAlpha.medium))
         }
@@ -66,7 +68,7 @@ private fun CardContent(title: String) {
 @Composable
 private fun ChallengeListPreview() {
     MaterialTheme {
-        ChallengeList(listOf("1", "2", "3", "4"))
+        ChallengeList(emptyList())
     }
 }
 
@@ -74,6 +76,6 @@ private fun ChallengeListPreview() {
 @Composable
 private fun ChallengeCardPreview() {
     MaterialTheme {
-        ChallengeCard("preview")
+        ChallengeCard(Challenge("preivew", LocalDate.now()))
     }
 }
