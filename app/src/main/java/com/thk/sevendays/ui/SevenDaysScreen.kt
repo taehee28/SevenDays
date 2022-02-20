@@ -1,30 +1,30 @@
 package com.thk.sevendays.ui
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.materialIcon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.thk.sevendays.data.Challenge
 import com.thk.sevendays.ui.components.ChallengeList
-import java.time.LocalDate
-import kotlin.random.Random
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -49,7 +49,7 @@ fun SevenDaysScreen(
     ) {
         ChallengeList(challenges = challenges)
         
-        TestDialog(showDialog = showDialog, setShowDialog = setShowDialog)
+        AddChallengeDialog(showDialog = showDialog, setShowDialog = setShowDialog)
     }
 }
 
@@ -63,61 +63,102 @@ private fun SevenDaysScreenPreview() {
     }
 }
 
-
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-private fun TestDialog(showDialog: Boolean, setShowDialog: (Boolean) -> Unit) {
+private fun AddChallengeDialog(showDialog: Boolean, setShowDialog: (Boolean) -> Unit) {
     AnimatedVisibility(
         visible = showDialog,
-        enter = slideInVertically(
-            initialOffsetY = { fullHeight -> fullHeight * 2 }
-        )
     ) {
-        Dialog(onDismissRequest = { setShowDialog(false) }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = "title") },
-                        navigationIcon = {
-                            IconButton(onClick = { setShowDialog(false) }) {
-                                Icon(imageVector = Icons.Default.Close,
-                                    contentDescription = "close")
-                            }
-                        }
-                    )
-                }
-            ) {
-
-            }
-        }
+        Dialog_Alert(setShowDialog = setShowDialog)
     }
-
-
-
-//    AlertDialog(
-//        onDismissRequest = {
-//            setShowDialog(false)
-//        },
-//        title = {
-//            Text(text = "title")
-//        },
-//        text = {
-//            Text(text = "body text")
-//        },
-//        confirmButton = {
-//            TextButton(onClick = { setShowDialog(false) }) {
-//                Text(text = "OK")
-//            }
-//        }
-//    )
-
 }
 
+@ExperimentalComposeUiApi
+@Composable
+private fun Dialog_FullScreen(setShowDialog: (Boolean) -> Unit) {
+    var challengeTitle by rememberSaveable { mutableStateOf("") }
+
+    Dialog(
+        onDismissRequest = { setShowDialog(false) },
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "새 도전 추가하기") },
+                    navigationIcon = {
+                        IconButton(onClick = { setShowDialog(false) }) {
+                            Icon(imageVector = Icons.Default.Close,
+                                contentDescription = "close")
+                        }
+                    }
+                )
+            }
+        ) {
+            AddChallengeDialogContent(
+                challengeTitle = challengeTitle,
+                onChallengeTitleChange = { challengeTitle = it }
+            )
+        }
+
+    }
+}
+
+@Composable
+private fun Dialog_Alert(setShowDialog: (Boolean) -> Unit) {
+    var challengeTitle by rememberSaveable { mutableStateOf("") }
+
+    AlertDialog(
+        modifier = Modifier.wrapContentHeight(),
+        onDismissRequest = { setShowDialog(false) },
+        text = {
+            Column {
+                Text(
+                    text = "새 도전 추가하기",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.h6
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                AddChallengeDialogContent(
+                    challengeTitle = challengeTitle,
+                    onChallengeTitleChange = { challengeTitle = it }
+                )
+
+            }
+        },
+        buttons = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                TextButton(onClick = { setShowDialog(false) }) {
+                    Text(text = "취소")
+                }
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "추가")
+                }
+            }
+        },
+        shape = RoundedCornerShape(16.dp)
+    )
+}
+
+@Composable
+private fun AddChallengeDialogContent(challengeTitle: String, onChallengeTitleChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = challengeTitle,
+        onValueChange = onChallengeTitleChange,
+        placeholder = { Text(text = "제목") },
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
+}
 
 @Preview
 @Composable
-private fun TestDialogPreview() {
+private fun AddChallengeDialogContentPreview() {
     MaterialTheme {
     }
 }

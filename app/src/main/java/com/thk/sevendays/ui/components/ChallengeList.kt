@@ -33,7 +33,7 @@ private fun ChallengeCard(challenge: Challenge) {
         modifier = Modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth()
-            .clickable {  }
+            .clickable { }
     ) {
         CardContent(challenge)
     }
@@ -41,6 +41,7 @@ private fun ChallengeCard(challenge: Challenge) {
 
 @Composable
 private fun CardContent(challenge: Challenge) {
+    // TODO: 2022/02/20 코너 둥글게 만들기  
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
