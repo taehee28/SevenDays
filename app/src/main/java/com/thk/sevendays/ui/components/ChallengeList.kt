@@ -11,8 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thk.sevendays.data.Challenge
@@ -30,6 +32,7 @@ fun ChallengeList(challenges: List<Challenge>) {
 
 @Composable
 private fun ChallengeCard(challenge: Challenge) {
+    // TODO: 2022/02/26 종료된 도전 카드 색 disable한 색으로 변경하기  
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = 3.dp,
@@ -54,21 +57,37 @@ private fun CardContent(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.padding(16.dp)
     ) {
-        Column() {
-            Text(text = title, style = MaterialTheme.typography.h5)
+        Column {
+            Text(
+                text = "7일 동안",
+                style = MaterialTheme.typography.caption,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+
             Spacer(modifier = Modifier.height(8.dp))
-            // TODO: 2022/02/23 글자 색 변경하기  
-            Text(text = "${challengingDays}일째 도전 중!", style = MaterialTheme.typography.body2, modifier = Modifier.alpha(ContentAlpha.medium))
-        }
 
-        Box(
-            modifier = Modifier
-                .size(50.dp, 50.dp)
-                .background(color = MaterialTheme.colors.secondary)
-        ) {
-            
+            // TODO: 2022/02/26 나중에 다른 색으로 변경하기
+            if (challengingDays > 7) {
+                Text(
+                    text = "도전 종료",
+                    style = MaterialTheme.typography.body2.copy(color = Color.Blue),
+                    modifier = Modifier.alpha(ContentAlpha.medium)
+                )
+            } else {
+                Text(
+                    text = "${challengingDays}일째 도전 중!",
+                    style = MaterialTheme.typography.body2.copy(color = Color.Red),
+                    modifier = Modifier.alpha(ContentAlpha.medium)
+                )
+            }
         }
-
 
     }
 }
@@ -77,7 +96,12 @@ private fun CardContent(
 @Composable
 private fun ChallengeListPreview() {
     MaterialTheme {
-        ChallengeList(emptyList())
+        ChallengeList(
+            listOf(
+                Challenge("하루 한번 산책", LocalDate.now()),
+                Challenge("하루에 물 2리터 마시기", LocalDate.now().minusDays(9))
+            )
+        )
     }
 }
 
@@ -85,6 +109,6 @@ private fun ChallengeListPreview() {
 @Composable
 private fun ChallengeCardPreview() {
     MaterialTheme {
-        ChallengeCard(Challenge("산책하기", LocalDate.now().minusDays(3)))
+        ChallengeCard(Challenge("하루 한번 산책하기", LocalDate.now().minusDays(3)))
     }
 }
