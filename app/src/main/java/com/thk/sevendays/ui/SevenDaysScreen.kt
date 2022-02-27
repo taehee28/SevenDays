@@ -1,7 +1,6 @@
 package com.thk.sevendays.ui
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,7 +22,7 @@ import com.thk.sevendays.data.Challenge
 import com.thk.sevendays.ui.components.ChallengeList
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import java.time.LocalDate
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -38,10 +36,7 @@ fun SevenDaysScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    setShowDialog(true)
-//                    onAddChallenge(Challenge("title ${Random.nextInt(50)}", LocalDate.now()))
-                }
+                onClick = { setShowDialog(true) }
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
             }
@@ -49,7 +44,11 @@ fun SevenDaysScreen(
     ) {
         ChallengeList(challenges = challenges)
         
-        AddChallengeDialog(showDialog = showDialog, setShowDialog = setShowDialog)
+        AddChallengeDialog(
+            showDialog = showDialog,
+            setShowDialog = setShowDialog,
+            onAddChallenge = onAddChallenge
+        )
     }
 }
 
@@ -66,11 +65,18 @@ private fun SevenDaysScreenPreview() {
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-private fun AddChallengeDialog(showDialog: Boolean, setShowDialog: (Boolean) -> Unit) {
+private fun AddChallengeDialog(
+    showDialog: Boolean,
+    setShowDialog: (Boolean) -> Unit,
+    onAddChallenge: (Challenge) -> Unit
+) {
     AnimatedVisibility(
         visible = showDialog,
     ) {
-        Dialog_Alert(setShowDialog = setShowDialog)
+        Dialog_Alert(
+            setShowDialog = setShowDialog,
+            onAddChallenge = onAddChallenge
+        )
     }
 }
 
@@ -98,7 +104,7 @@ private fun Dialog_FullScreen(setShowDialog: (Boolean) -> Unit) {
         ) {
             AddChallengeDialogContent(
                 challengeTitle = challengeTitle,
-                onChallengeTitleChange = { challengeTitle = it }
+                onTitleChange = { challengeTitle = it }
             )
         }
 
@@ -106,7 +112,10 @@ private fun Dialog_FullScreen(setShowDialog: (Boolean) -> Unit) {
 }
 
 @Composable
-private fun Dialog_Alert(setShowDialog: (Boolean) -> Unit) {
+private fun Dialog_Alert(
+    setShowDialog: (Boolean) -> Unit,
+    onAddChallenge: (Challenge) -> Unit,
+) {
     var challengeTitle by rememberSaveable { mutableStateOf("") }
 
     AlertDialog(
@@ -123,7 +132,7 @@ private fun Dialog_Alert(setShowDialog: (Boolean) -> Unit) {
                 Spacer(modifier = Modifier.height(16.dp))
                 AddChallengeDialogContent(
                     challengeTitle = challengeTitle,
-                    onChallengeTitleChange = { challengeTitle = it }
+                    onTitleChange = { challengeTitle = it }
                 )
 
             }
@@ -136,7 +145,13 @@ private fun Dialog_Alert(setShowDialog: (Boolean) -> Unit) {
                 TextButton(onClick = { setShowDialog(false) }) {
                     Text(text = "취소")
                 }
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(
+                    onClick = {
+                        val newChallenge = Challenge(challengeTitle, LocalDate.now())
+                        onAddChallenge(newChallenge)
+                        setShowDialog(false)
+                    }
+                ) {
                     Text(text = "추가")
                 }
             }
@@ -146,10 +161,10 @@ private fun Dialog_Alert(setShowDialog: (Boolean) -> Unit) {
 }
 
 @Composable
-private fun AddChallengeDialogContent(challengeTitle: String, onChallengeTitleChange: (String) -> Unit) {
+private fun AddChallengeDialogContent(challengeTitle: String, onTitleChange: (String) -> Unit) {
     OutlinedTextField(
         value = challengeTitle,
-        onValueChange = onChallengeTitleChange,
+        onValueChange = onTitleChange,
         placeholder = { Text(text = "제목") },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),

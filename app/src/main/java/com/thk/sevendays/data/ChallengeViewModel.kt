@@ -4,8 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 
 class ChallengeViewModel: ViewModel() {
-    var challenges = mutableStateListOf<Challenge>()
-        private set
+    val challenges = mutableStateListOf<Challenge>()
 
     fun addChallenge(item: Challenge) {
         challenges.add(item)
