@@ -27,7 +27,7 @@ import java.time.LocalDate
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
-fun SevenDaysScreen(
+fun SevenDaysHome(
     challenges: List<Challenge>,
     onAddChallenge: (Challenge) -> Unit,
 ) {
@@ -58,7 +58,7 @@ fun SevenDaysScreen(
 @Composable
 private fun SevenDaysScreenPreview() {
     MaterialTheme {
-        SevenDaysScreen(challenges = emptyList(), onAddChallenge = {})
+        SevenDaysHome(challenges = emptyList(), onAddChallenge = {})
     }
 }
 

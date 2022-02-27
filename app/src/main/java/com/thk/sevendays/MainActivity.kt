@@ -7,12 +7,10 @@ import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.tooling.preview.Preview
 import com.thk.sevendays.data.ChallengeViewModel
-import com.thk.sevendays.ui.SevenDaysScreen
+import com.thk.sevendays.ui.SevenDaysHome
 import com.thk.sevendays.ui.theme.SevenDaysTheme
 
 @ExperimentalComposeUiApi
@@ -27,15 +25,15 @@ class MainActivity : ComponentActivity() {
             SevenDaysTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    SevenDaysActivityScreen(challengeViewModel = challengeViewModel)           
+                    SevenDaysApp(challengeViewModel = challengeViewModel)
                 }
             }
         }
     }
     
     @Composable
-    private fun SevenDaysActivityScreen(challengeViewModel: ChallengeViewModel) {
-        SevenDaysScreen(
+    private fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
+        SevenDaysHome(
             challenges = challengeViewModel.challenges,
             onAddChallenge = challengeViewModel::addChallenge
         )
