@@ -1,5 +1,6 @@
 package com.thk.sevendays.ui.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,18 +23,29 @@ import com.thk.sevendays.utils.challengingDaysFrom
 import java.time.LocalDate
 
 @Composable
-fun ChallengeList(challenges: List<Challenge>) {
+fun ChallengeList(
+    challenges: List<Challenge>,
+    onChallengeClick: (String) -> Unit
+) {
     LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxHeight()) {
         items(items = challenges) { challenge ->
-            ChallengeCard(challenge = challenge)
+            ChallengeCard(
+                challenge = challenge,
+                onChallengeClick = onChallengeClick
+            )
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ChallengeCard(challenge: Challenge) {
+private fun ChallengeCard(
+    challenge: Challenge,
+    onChallengeClick: (String) -> Unit,
+) {
     // TODO: 2022/02/26 종료된 도전 카드 색 disable한 색으로 변경하기  
     Card(
+        onClick = { onChallengeClick(challenge.id.toString()) },
         shape = RoundedCornerShape(16.dp),
         elevation = 3.dp,
         modifier = Modifier
@@ -100,7 +112,8 @@ private fun ChallengeListPreview() {
             listOf(
                 Challenge("하루 한번 산책", LocalDate.now()),
                 Challenge("하루에 물 2리터 마시기", LocalDate.now().minusDays(9))
-            )
+            ),
+            onChallengeClick = {}
         )
     }
 }
@@ -109,6 +122,9 @@ private fun ChallengeListPreview() {
 @Composable
 private fun ChallengeCardPreview() {
     MaterialTheme {
-        ChallengeCard(Challenge("하루 한번 산책하기", LocalDate.now().minusDays(3)))
+        ChallengeCard(
+            Challenge("하루 한번 산책하기", LocalDate.now().minusDays(3)),
+            onChallengeClick = {}
+        )
     }
 }

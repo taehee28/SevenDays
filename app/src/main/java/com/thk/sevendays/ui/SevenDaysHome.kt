@@ -30,6 +30,7 @@ import java.time.LocalDate
 fun SevenDaysHome(
     challenges: List<Challenge>,
     onAddChallenge: (Challenge) -> Unit,
+    onChallengeClick: (String) -> Unit
 ) {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
@@ -42,7 +43,10 @@ fun SevenDaysHome(
             }
         }
     ) {
-        ChallengeList(challenges = challenges)
+        ChallengeList(
+            challenges = challenges,
+            onChallengeClick = onChallengeClick
+        )
         
         AddChallengeDialog(
             showDialog = showDialog,
@@ -58,7 +62,7 @@ fun SevenDaysHome(
 @Composable
 private fun SevenDaysScreenPreview() {
     MaterialTheme {
-        SevenDaysHome(challenges = emptyList(), onAddChallenge = {})
+        SevenDaysHome(challenges = emptyList(), onAddChallenge = {}, onChallengeClick = {})
     }
 }
 

@@ -1,5 +1,7 @@
 package com.thk.sevendays.utils
 
+import androidx.navigation.NavController
+import com.thk.sevendays.SevenDaysScreen
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
@@ -8,4 +10,8 @@ import java.time.temporal.ChronoUnit
  */
 fun LocalDate.challengingDaysFrom(startDate: LocalDate): Int {
     return ChronoUnit.DAYS.between(startDate, this).toInt() + 1
+}
+
+fun NavController.navigateToDetail(id: String) {
+    navigate("${SevenDaysScreen.Detail.name}/$id")
 }
