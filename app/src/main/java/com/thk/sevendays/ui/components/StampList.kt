@@ -30,8 +30,11 @@ fun LabeledStampList() {
             items = list
         ) { index, item ->
             LabeledStampBox(
-                isStartNode = index == list.firstIndex,
-                isEndNode = index == list.lastIndex
+                nodePosition = when (index) {
+                    list.firstIndex -> NodePosition.Start
+                    list.lastIndex -> NodePosition.End
+                    else -> NodePosition.Middle
+                }
             )
         }
     }
@@ -45,14 +48,13 @@ fun StampListPreview() {
 
 @Composable
 private fun LabeledStampBox(
-    isStartNode: Boolean = false,
-    isEndNode: Boolean = false
+    nodePosition: NodePosition = NodePosition.Middle
 ) {
     Row(
         modifier = Modifier.wrapContentWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        StampBox(isStartNode, isEndNode)
+        StampBox(nodePosition = nodePosition)
         Spacer(modifier = Modifier.width(32.dp))
         Label()
     }
@@ -94,29 +96,20 @@ private fun LabelPreview() {
 
 @Composable
 private fun StampBox(
-    isStartNode: Boolean = false,
-    isEndNode: Boolean = false
+    nodePosition: NodePosition = NodePosition.Middle
 ) {
     Box(
         modifier = Modifier.size(150.dp),
         contentAlignment = Alignment.Center
     ) {
-        if (!isStartNode) {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .align(Alignment.TopCenter)
-                    .background(Red100)
-            )
-        }
 
-        if (!isEndNode) {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .align(Alignment.BottomCenter)
-                    .background(Red100)
-            )
+        when (nodePosition) {
+            NodePosition.Start -> Edge(modifier = Modifier.align(Alignment.BottomCenter))
+            NodePosition.End -> Edge(modifier = Modifier.align(Alignment.TopCenter))
+            NodePosition.Middle -> {
+                Edge(modifier = Modifier.align(Alignment.BottomCenter))
+                Edge(modifier = Modifier.align(Alignment.TopCenter))
+            }
         }
 
         Box(
@@ -131,8 +124,21 @@ private fun StampBox(
     }
 }
 
+@Composable
+fun Edge(
+    modifier: Modifier
+) = Box(
+    modifier = modifier
+        .size(50.dp)
+        .background(Red100)
+)
+
 @Preview
 @Composable
 fun StampBoxPreview() {
     StampBox()
+}
+
+private enum class NodePosition {
+    Start, Middle, End
 }

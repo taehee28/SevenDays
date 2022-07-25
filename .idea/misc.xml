@@ -28,13 +28,23 @@
         <entry key="../../../../layout/compose-model-1649577973315.xml" value="0.1" />
         <entry key="../../../../layout/compose-model-1649578264897.xml" value="0.335" />
         <entry key="../../../../layout/compose-model-1649578545700.xml" value="0.35833333333333334" />
+        <entry key="../../../../layout/compose-model-1649943749407.xml" value="0.35833333333333334" />
+        <entry key="../../../../layout/compose-model-1649944029824.xml" value="0.35833333333333334" />
+        <entry key="../../../../layout/compose-model-1650374301898.xml" value="0.3453703703703704" />
+        <entry key="../../../../layout/compose-model-1650376788923.xml" value="0.35833333333333334" />
+        <entry key="../../../../layout/compose-model-1650776455923.xml" value="0.3490740740740741" />
+        <entry key="../../../../layout/compose-model-1650776476810.xml" value="0.1" />
+        <entry key="../../../../layout/compose-model-1650783761564.xml" value="0.3490740740740741" />
+        <entry key="../../../../layout/compose-model-1653394342292.xml" value="0.17037037037037037" />
+        <entry key="../../../../layout/compose-model-1658750851359.xml" value="0.41944444444444445" />
+        <entry key="../../../../layout/compose-model-1658750999487.xml" value="0.28847184986595176" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.28703703703703703" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.28703703703703703" />
+        <entry key="app/src/main/res/drawable/ic_round_check_24.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_challenge_add.xml" value="0.25" />
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
