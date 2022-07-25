@@ -40,39 +40,7 @@ fun DetailScreenContent() {
         Text(text = "prefix")
         Text(text = "title")
         Text(text = "period")
-        StampBoxes()
-    }
-}
 
-@Composable
-fun StampBoxes() {
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
-    ) {
-        items(
-            7,
-            span = {
-                GridItemSpan(if (it == 6) 2 else 1)
-            }
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                StampBox()
-            }
-        }
-    }
-}
-
-
-@Composable
-fun StampBox() {
-    Box(
-        Modifier
-            .width(70.dp)
-            .height(70.dp)
-            .border(width = 3.dp, color = Color.Gray)
-    ) {
-
+        // TODO: 새로운 StampList 컴포저블 이용해서 화면 구현하기
     }
 }

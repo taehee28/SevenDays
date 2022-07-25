@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
             ) { entry ->
                 val id = entry.arguments?.getString("id")
                 Text(text = id ?: "null")
+                // TODO: Detail 화면으로 이동하기
             }
         }
     }
