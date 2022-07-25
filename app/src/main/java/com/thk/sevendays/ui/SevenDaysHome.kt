@@ -151,8 +151,7 @@ private fun Dialog_Alert(
                 }
                 TextButton(
                     onClick = {
-                        val newChallenge = Challenge(challengeTitle, LocalDate.now())
-                        onAddChallenge(newChallenge)
+                        // TODO: room에 데이터 추가 하도록 구현하기
                         setShowDialog(false)
                     }
                 ) {

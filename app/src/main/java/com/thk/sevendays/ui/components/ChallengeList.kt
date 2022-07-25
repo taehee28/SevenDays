@@ -45,7 +45,7 @@ private fun ChallengeCard(
 ) {
     // TODO: 2022/02/26 종료된 도전 카드 색 disable한 색으로 변경하기  
     Card(
-        onClick = { onChallengeClick(challenge.id.toString()) },
+        onClick = { onChallengeClick(challenge.challengeId.toString()) },
         shape = RoundedCornerShape(16.dp),
         elevation = 3.dp,
         modifier = Modifier
@@ -110,8 +110,8 @@ private fun ChallengeListPreview() {
     MaterialTheme {
         ChallengeList(
             listOf(
-                Challenge("하루 한번 산책", LocalDate.now()),
-                Challenge("하루에 물 2리터 마시기", LocalDate.now().minusDays(9))
+                Challenge(title = "하루 한번 산책", startDate = LocalDate.now()),
+                Challenge(title = "하루에 물 2리터 마시기", startDate = LocalDate.now().minusDays(9))
             ),
             onChallengeClick = {}
         )
@@ -123,7 +123,7 @@ private fun ChallengeListPreview() {
 private fun ChallengeCardPreview() {
     MaterialTheme {
         ChallengeCard(
-            Challenge("하루 한번 산책하기", LocalDate.now().minusDays(3)),
+            Challenge(title = "하루 한번 산책하기", startDate = LocalDate.now().minusDays(3)),
             onChallengeClick = {}
         )
     }
