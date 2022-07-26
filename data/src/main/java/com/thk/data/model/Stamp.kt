@@ -1,4 +1,4 @@
-package com.thk.sevendays.data
+package com.thk.data.model
 
 import java.time.LocalDate
 

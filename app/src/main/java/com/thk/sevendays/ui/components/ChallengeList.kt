@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.thk.sevendays.data.Challenge
+import com.thk.data.model.Challenge
 import com.thk.sevendays.utils.challengingDaysFrom
 import java.time.LocalDate
 

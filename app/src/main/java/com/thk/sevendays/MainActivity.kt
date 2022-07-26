@@ -18,7 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.thk.sevendays.data.Challenge
+import com.thk.data.model.Challenge
 import com.thk.sevendays.data.ChallengeViewModel
 import com.thk.sevendays.ui.SevenDaysHome
 import com.thk.sevendays.ui.theme.SevenDaysTheme
