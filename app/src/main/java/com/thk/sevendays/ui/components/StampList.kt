@@ -18,21 +18,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.thk.sevendays.data.Stamp
+import com.thk.sevendays.data.sampleStampList
 import com.thk.sevendays.ui.theme.*
 import com.thk.sevendays.utils.firstIndex
+import com.thk.sevendays.utils.isToday
+import java.time.LocalDate
+
+private enum class NodePosition {
+    Start, Middle, End
+}
 
 @Composable
-fun LabeledStampList() {
-    val list = (1..7).toList()
+fun LabeledStampList(stamps: List<Stamp>) {
 
     LazyColumn() {
         itemsIndexed(
-            items = list
+            items = stamps
         ) { index, item ->
             LabeledStampBox(
+                stamp = item,
                 nodePosition = when (index) {
-                    list.firstIndex -> NodePosition.Start
-                    list.lastIndex -> NodePosition.End
+                    stamps.firstIndex -> NodePosition.Start
+                    stamps.lastIndex -> NodePosition.End
                     else -> NodePosition.Middle
                 }
             )
@@ -43,31 +51,45 @@ fun LabeledStampList() {
 @Preview
 @Composable
 fun StampListPreview() {
-    LabeledStampList()
+    LabeledStampList(sampleStampList)
 }
 
 @Composable
 private fun LabeledStampBox(
+    stamp: Stamp,
     nodePosition: NodePosition = NodePosition.Middle
 ) {
     Row(
         modifier = Modifier.wrapContentWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        StampBox(nodePosition = nodePosition)
+        StampBox(isChecked = stamp.isChecked, nodePosition = nodePosition)
+
         Spacer(modifier = Modifier.width(32.dp))
-        Label()
+
+        if (stamp.isChecked || stamp.date.isToday()) {
+            val (labelText, labelColor) = if (stamp.date.isToday()) {
+                "오늘!" to Blue300
+            } else {
+                stamp.date.toString() to RedA100
+            }
+
+            Label(labelText, labelColor)
+        }
     }
 }
 
 @Preview
 @Composable
 private fun LabeledStampBoxPreview() {
-    LabeledStampBox()
+    LabeledStampBox(sampleStampList[0])
 }
 
 @Composable
-private fun Label(color: Color = Color.Gray) {
+private fun Label(
+    text: String,
+    color: Color = Color.Gray
+) {
     Box(
         modifier = Modifier
             .padding(8.dp)
@@ -79,9 +101,10 @@ private fun Label(color: Color = Color.Gray) {
                 bottom = 4.dp,
                 start = MaterialTheme.typography.h5.fontSize.value.dp * 1.1f,
                 end = MaterialTheme.typography.h5.fontSize.value.dp / 2
-            )
+            ),
+        contentAlignment = Alignment.CenterStart
     ) {
-        Text(text = "TEST", style = MaterialTheme.typography.h5, fontWeight = FontWeight.W300, color = Color.White)
+        Text(text = text, style = MaterialTheme.typography.h5, fontWeight = FontWeight.W300, color = Color.White)
     }
 }
 
@@ -89,13 +112,14 @@ private fun Label(color: Color = Color.Gray) {
 @Composable
 private fun LabelPreview() {
     Column {
-        Label(Blue300)
-        Label(RedA100)
+        Label(LocalDate.now().toString(), Blue300)
+        Label(LocalDate.now().toString(), RedA100)
     }
 }
 
 @Composable
 private fun StampBox(
+    isChecked: Boolean,
     nodePosition: NodePosition = NodePosition.Middle
 ) {
     Box(
@@ -124,21 +148,17 @@ private fun StampBox(
     }
 }
 
+@Preview
 @Composable
-fun Edge(
+fun StampBoxPreview() {
+    StampBox(false)
+}
+
+@Composable
+private fun Edge(
     modifier: Modifier
 ) = Box(
     modifier = modifier
         .size(50.dp)
         .background(Red100)
 )
-
-@Preview
-@Composable
-fun StampBoxPreview() {
-    StampBox()
-}
-
-private enum class NodePosition {
-    Start, Middle, End
-}
