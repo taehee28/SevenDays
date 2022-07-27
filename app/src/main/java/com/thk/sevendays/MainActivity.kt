@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
+
 package com.thk.sevendays
 
 import android.os.Bundle
@@ -20,6 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.thk.data.model.Challenge
 import com.thk.sevendays.data.ChallengeViewModel
+import com.thk.sevendays.ui.ChallengeDetailScreen
 import com.thk.sevendays.ui.SevenDaysHome
 import com.thk.sevendays.ui.theme.SevenDaysTheme
 import com.thk.sevendays.utils.navigateToDetail
@@ -37,49 +40,49 @@ class MainActivity : ComponentActivity() {
         }
     }
     
-    @Composable
-    private fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
-        SevenDaysTheme {
-            // A surface container using the 'background' color from the theme
-            Surface(color = MaterialTheme.colors.background) {
-                SevenDaysNavHost(
-                    challenges = challengeViewModel.challenges,
-                    onAddChallenge = challengeViewModel::addChallenge
-                )
-            }
+}
+
+@Composable
+private fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
+    SevenDaysTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(color = MaterialTheme.colors.background) {
+            SevenDaysNavHost(
+                challenges = challengeViewModel.challenges,
+                onAddChallenge = challengeViewModel::addChallenge
+            )
         }
     }
+}
 
     @Composable
     private fun SevenDaysNavHost(challenges: List<Challenge>, onAddChallenge: (Challenge) -> Unit) {
         val navController = rememberNavController()
 
-        NavHost(
-            navController = navController,
-            startDestination = SevenDaysScreen.Home.name
-        ) {
-            // 메인 리스트 화면
-            composable(route = SevenDaysScreen.Home.name) {
-                SevenDaysHome(
-                    challenges = challenges,
-                    onAddChallenge = onAddChallenge,
-                    onChallengeClick = { navController.navigateToDetail(it) }
-                )
-            }
+    NavHost(
+        navController = navController,
+        startDestination = SevenDaysScreen.Home.name
+    ) {
+        // 메인 리스트 화면
+        composable(route = SevenDaysScreen.Home.name) {
+            SevenDaysHome(
+                challenges = challenges,
+                onAddChallenge = onAddChallenge,
+                onChallengeClick = { navController.navigateToDetail(it) }
+            )
+        }
 
-            // 도전 상세 화면
-            composable(
-                route = "${SevenDaysScreen.Detail.name}/{id}",
-                arguments = listOf(
-                    navArgument("id") {
-                        type = NavType.StringType
-                    }
-                )
-            ) { entry ->
-                val id = entry.arguments?.getString("id")
-                Text(text = id ?: "null")
-                // TODO: Detail 화면으로 이동하기
-            }
+        // 도전 상세 화면
+        composable(
+            route = "${SevenDaysScreen.Detail.name}/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.StringType
+                }
+            )
+        ) { entry ->
+            val id = entry.arguments?.getString("id") ?: "null"
+            ChallengeDetailScreen(id = id)
         }
     }
 }

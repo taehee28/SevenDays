@@ -50,7 +50,7 @@ fun LabeledStampList(stamps: List<Stamp>) {
 
 @Preview
 @Composable
-fun StampListPreview() {
+private fun StampListPreview() {
     LabeledStampList(sampleStampList)
 }
 
@@ -65,7 +65,7 @@ private fun LabeledStampBox(
     ) {
         StampBox(isChecked = stamp.isChecked, nodePosition = nodePosition)
 
-        Spacer(modifier = Modifier.width(32.dp))
+        Spacer(modifier = Modifier.width(24.dp))
 
         if (stamp.isChecked || stamp.date.isToday()) {
             val (labelText, labelColor) = if (stamp.date.isToday()) {
@@ -99,12 +99,12 @@ private fun Label(
             .padding(
                 top = 4.dp,
                 bottom = 4.dp,
-                start = MaterialTheme.typography.h5.fontSize.value.dp * 1.1f,
-                end = MaterialTheme.typography.h5.fontSize.value.dp / 2
+                start = MaterialTheme.typography.h6.fontSize.value.dp * 1.1f,
+                end = MaterialTheme.typography.h6.fontSize.value.dp / 2
             ),
         contentAlignment = Alignment.CenterStart
     ) {
-        Text(text = text, style = MaterialTheme.typography.h5, fontWeight = FontWeight.W300, color = Color.White)
+        Text(text = text, style = MaterialTheme.typography.h6, fontWeight = FontWeight.W300, color = Color.White)
     }
 }
 

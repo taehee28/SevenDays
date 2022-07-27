@@ -15,12 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.thk.data.model.sampleStampList
+import com.thk.sevendays.ui.components.LabeledStampList
 
 @Composable
 fun ChallengeDetailScreen(id: String) {
     Scaffold() {
         DetailScreenContent()
     }
+    Text(text = "id = $id")
 }
 
 @Preview
@@ -42,5 +45,6 @@ fun DetailScreenContent() {
         Text(text = "period")
 
         // TODO: 새로운 StampList 컴포저블 이용해서 화면 구현하기
+        LabeledStampList(stamps = sampleStampList)
     }
 }
