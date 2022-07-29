@@ -3,10 +3,13 @@
 package com.thk.sevendays.ui
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,14 +25,33 @@ import com.thk.sevendays.utils.navigateToDetail
 @Composable
 fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
     SevenDaysTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(color = MaterialTheme.colors.background) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(text = "hi")
+                    },
+                    navigationIcon = {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(Icons.Default.Menu, contentDescription = "menu")
+                        }
+                    },
+                    backgroundColor = Color.White
+                )
+            }
+        ) {
             SevenDaysNavHost(
                 challenges = sampleChallengeList,
                 onAddChallenge = challengeViewModel::addChallenge
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun SevenDaysAppPreview() {
+    SevenDaysApp(challengeViewModel = ChallengeViewModel())
 }
 
 @Composable
