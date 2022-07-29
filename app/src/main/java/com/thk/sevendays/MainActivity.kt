@@ -21,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.thk.data.model.Challenge
+import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.data.ChallengeViewModel
 import com.thk.sevendays.ui.ChallengeDetailScreen
 import com.thk.sevendays.ui.SevenDaysHome
@@ -48,7 +49,7 @@ private fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
         // A surface container using the 'background' color from the theme
         Surface(color = MaterialTheme.colors.background) {
             SevenDaysNavHost(
-                challenges = challengeViewModel.challenges,
+                challenges = sampleChallengeList,
                 onAddChallenge = challengeViewModel::addChallenge
             )
         }

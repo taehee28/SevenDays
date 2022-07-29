@@ -4,11 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.thk.data.model.Stamp
 import com.thk.data.model.sampleStampList
 import com.thk.sevendays.ui.theme.*
@@ -30,9 +32,45 @@ private enum class NodePosition {
 }
 
 @Composable
-fun LabeledStampList(stamps: List<Stamp>) {
+fun ChallengeStampCard(
+    stamps: List<Stamp>,
+    header: @Composable LazyItemScope.() -> Unit = {}
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        item(content = header)
 
-    LazyColumn() {
+        item { 
+            StampListCard(stamps = stamps)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ChallengeStampCardPreview() {
+    ChallengeStampCard(stamps = sampleStampList)
+}
+
+@Composable
+fun LabeledStampList(
+    stamps: List<Stamp>,
+    header: @Composable LazyItemScope.() -> Unit = {}
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        item(content = header)
+
         itemsIndexed(
             items = stamps
         ) { index, item ->
@@ -51,7 +89,40 @@ fun LabeledStampList(stamps: List<Stamp>) {
 @Preview
 @Composable
 private fun StampListPreview() {
-    LabeledStampList(sampleStampList)
+//    LabeledStampList(sampleStampList)
+}
+
+@Composable
+private fun StampListCard(
+    stamps: List<Stamp>
+) {
+    Card(
+        shape = RoundedCornerShape(16.dp),
+        elevation = 3.dp,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            for ((index, item) in stamps.withIndex()) {
+                LabeledStampBox(
+                    stamp = item,
+                    nodePosition = when (index) {
+                        stamps.firstIndex -> NodePosition.Start
+                        stamps.lastIndex -> NodePosition.End
+                        else -> NodePosition.Middle
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun StampListCardPreview() {
+    StampListCard(sampleStampList)
 }
 
 @Composable
@@ -60,8 +131,9 @@ private fun LabeledStampBox(
     nodePosition: NodePosition = NodePosition.Middle
 ) {
     Row(
-        modifier = Modifier.wrapContentWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.width(300.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
     ) {
         StampBox(isChecked = stamp.isChecked, nodePosition = nodePosition)
 
@@ -99,12 +171,11 @@ private fun Label(
             .padding(
                 top = 4.dp,
                 bottom = 4.dp,
-                start = MaterialTheme.typography.h6.fontSize.value.dp * 1.1f,
-                end = MaterialTheme.typography.h6.fontSize.value.dp / 2
-            ),
-        contentAlignment = Alignment.CenterStart
+                start = 18.sp.value.dp * 1.1f,
+                end = 18.sp.value.dp / 2
+            )
     ) {
-        Text(text = text, style = MaterialTheme.typography.h6, fontWeight = FontWeight.W300, color = Color.White)
+        Text(text = text, fontSize = 18.sp, fontWeight = FontWeight.W300, color = Color.White)
     }
 }
 
@@ -123,7 +194,7 @@ private fun StampBox(
     nodePosition: NodePosition = NodePosition.Middle
 ) {
     Box(
-        modifier = Modifier.size(150.dp),
+        modifier = Modifier.size(120.dp),
         contentAlignment = Alignment.Center
     ) {
 
@@ -138,7 +209,7 @@ private fun StampBox(
 
         Box(
             modifier = Modifier
-                .size(110.dp)
+                .size(90.dp)
                 .clip(CircleShape)
                 .background(Color.White)
                 .border(10.dp, Red100, CircleShape)
@@ -159,6 +230,6 @@ private fun Edge(
     modifier: Modifier
 ) = Box(
     modifier = modifier
-        .size(50.dp)
+        .size(30.dp)
         .background(Red100)
 )

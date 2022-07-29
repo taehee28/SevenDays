@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thk.data.model.Challenge
+import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.utils.challengingDaysFrom
 import java.time.LocalDate
 
@@ -39,7 +40,7 @@ fun ChallengeList(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun ChallengeCard(
+fun ChallengeCard(
     challenge: Challenge,
     onChallengeClick: (String) -> Unit,
 ) {
@@ -109,10 +110,7 @@ private fun CardContent(
 private fun ChallengeListPreview() {
     MaterialTheme {
         ChallengeList(
-            listOf(
-                Challenge(title = "하루 한번 산책", startDate = LocalDate.now()),
-                Challenge(title = "하루에 물 2리터 마시기", startDate = LocalDate.now().minusDays(9))
-            ),
+            sampleChallengeList,
             onChallengeClick = {}
         )
     }
@@ -123,7 +121,7 @@ private fun ChallengeListPreview() {
 private fun ChallengeCardPreview() {
     MaterialTheme {
         ChallengeCard(
-            Challenge(title = "하루 한번 산책하기", startDate = LocalDate.now().minusDays(3)),
+            sampleChallengeList[1],
             onChallengeClick = {}
         )
     }
