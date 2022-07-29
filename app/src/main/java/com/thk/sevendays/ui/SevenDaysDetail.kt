@@ -32,6 +32,6 @@ fun ChallengeDetailScreenPreview() {
 @Composable
 fun DetailScreenContent() {
     ChallengeStampCard(stamps = sampleStampList) {
-        ChallengeCard(challenge = sampleChallengeList[0], onChallengeClick = {})
+        ChallengeCard(challenge = sampleChallengeList[0])
     }
 }

@@ -42,17 +42,21 @@ fun ChallengeList(
 @Composable
 fun ChallengeCard(
     challenge: Challenge,
-    onChallengeClick: (String) -> Unit,
+    onChallengeClick: ((String) -> Unit)? = null,
 ) {
     // TODO: 2022/02/26 종료된 도전 카드 색 disable한 색으로 변경하기  
     Card(
-        onClick = { onChallengeClick(challenge.challengeId.toString()) },
+        enabled = onChallengeClick != null,
+        onClick = {
+            if (onChallengeClick != null) {
+                onChallengeClick(challenge.challengeId.toString())
+            }
+        },
         shape = RoundedCornerShape(16.dp),
         elevation = 3.dp,
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth()
-            .clickable { }
+            .fillMaxWidth(),
     ) {
         CardContent(challenge.title, challenge.startDate)
     }
