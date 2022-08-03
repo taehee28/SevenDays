@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,7 +36,12 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
                 NavigationTopAppBar(
                     navController = navController,
                     title = {},
-                    backgroundColor = Color.White,
+                    navigationIcon = {
+                         IconButton(onClick = { /*TODO*/ }) {
+                             Icon(Icons.Default.Home, contentDescription = "home")
+                         }
+                    },
+                    backgroundColor = MaterialTheme.colors.background,
                     elevation = 0.dp
                 )
             }
