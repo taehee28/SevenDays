@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,7 +35,8 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
                 NavigationTopAppBar(
                     navController = navController,
                     title = {},
-                    backgroundColor = Color.White
+                    backgroundColor = Color.White,
+                    elevation = 0.dp
                 )
             }
         ) {

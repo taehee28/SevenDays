@@ -41,7 +41,7 @@ fun ChallengeStampCard(
             .fillMaxHeight()
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(16.dp)
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
     ) {
         item(content = header)
 
