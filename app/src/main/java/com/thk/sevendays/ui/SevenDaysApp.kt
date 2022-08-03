@@ -2,13 +2,11 @@
 
 package com.thk.sevendays.ui
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -80,9 +78,9 @@ private fun NavigationIcon(
     navController: NavHostController,
     navigationIcon: @Composable (() -> Unit)? = null
 ): @Composable (() -> Unit)? {
-    val navBackStackEntry by navController.rememberNavBackStackEntryAsState()
+    val previousBackStackEntry by navController.rememberPreviousBackStackEntryAsState()
 
-    return navBackStackEntry?.let {
+    return previousBackStackEntry?.let {
         {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(Icons.Default.ArrowBack, contentDescription = "back")
@@ -92,10 +90,8 @@ private fun NavigationIcon(
 }
 
 @Composable
-private fun NavController.rememberNavBackStackEntryAsState(): State<NavBackStackEntry?> {
-    val previousNavBackStackEntry = remember {
-        mutableStateOf(previousBackStackEntry)
-    }
+private fun NavController.rememberPreviousBackStackEntryAsState(): State<NavBackStackEntry?> {
+    val previousNavBackStackEntry = remember { mutableStateOf(previousBackStackEntry) }
 
     DisposableEffect(this) {
         val callback = NavController.OnDestinationChangedListener { controller, _, _ ->
