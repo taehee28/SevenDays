@@ -2,16 +2,23 @@
 
 package com.thk.sevendays.ui
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.navigation.NavType
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.SevenDaysScreen
@@ -21,10 +28,20 @@ import com.thk.sevendays.utils.navigateToDetail
 
 @Composable
 fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
+    val navController = rememberNavController()
+
     SevenDaysTheme {
-        // A surface container using the 'background' color from the theme
-        Surface(color = MaterialTheme.colors.background) {
+        Scaffold(
+            topBar = {
+                NavigationTopAppBar(
+                    navController = navController,
+                    title = {},
+                    backgroundColor = Color.White
+                )
+            }
+        ) {
             SevenDaysNavHost(
+                navController = navController,
                 challenges = sampleChallengeList,
                 onAddChallenge = challengeViewModel::addChallenge
             )
@@ -32,10 +49,75 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
     }
 }
 
+@Preview
 @Composable
-private fun SevenDaysNavHost(challenges: List<Challenge>, onAddChallenge: (Challenge) -> Unit) {
-    val navController = rememberNavController()
+private fun SevenDaysAppPreview() {
+    SevenDaysApp(challengeViewModel = ChallengeViewModel())
+}
 
+@Composable
+private fun NavigationTopAppBar(
+    navController: NavHostController,
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    navigationIcon: @Composable (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {},
+    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    contentColor: Color = contentColorFor(backgroundColor),
+    elevation: Dp = AppBarDefaults.TopAppBarElevation
+) = TopAppBar(
+    title = title,
+    modifier = modifier,
+    navigationIcon = NavigationIcon(navController = navController, navigationIcon = navigationIcon),
+    actions = actions,
+    backgroundColor = backgroundColor,
+    contentColor = contentColor,
+    elevation = elevation
+)
+
+@Composable
+private fun NavigationIcon(
+    navController: NavHostController,
+    navigationIcon: @Composable (() -> Unit)? = null
+): @Composable (() -> Unit)? {
+    val navBackStackEntry by navController.rememberNavBackStackEntryAsState()
+
+    return navBackStackEntry?.let {
+        {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "back")
+            }
+        }
+    } ?: navigationIcon
+}
+
+@Composable
+private fun NavController.rememberNavBackStackEntryAsState(): State<NavBackStackEntry?> {
+    val previousNavBackStackEntry = remember {
+        mutableStateOf(previousBackStackEntry)
+    }
+
+    DisposableEffect(this) {
+        val callback = NavController.OnDestinationChangedListener { controller, _, _ ->
+            previousNavBackStackEntry.value = controller.previousBackStackEntry
+        }
+
+        addOnDestinationChangedListener(callback)
+
+        onDispose {
+            removeOnDestinationChangedListener(callback)
+        }
+    }
+
+    return previousNavBackStackEntry
+}
+
+@Composable
+private fun SevenDaysNavHost(
+    navController: NavHostController,
+    challenges: List<Challenge>,
+    onAddChallenge: (Challenge) -> Unit,
+) {
     NavHost(
         navController = navController,
         startDestination = SevenDaysScreen.Home.name
