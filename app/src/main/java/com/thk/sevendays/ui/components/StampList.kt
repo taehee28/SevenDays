@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.AbsoluteCutCornerShape
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -162,6 +163,8 @@ private fun Label(
     text: String,
     color: Color = Color.Gray
 ) {
+    val labelFondSize = MaterialTheme.typography.subtitle1
+
     Box(
         modifier = Modifier
             .padding(8.dp)
@@ -171,11 +174,11 @@ private fun Label(
             .padding(
                 top = 4.dp,
                 bottom = 4.dp,
-                start = 18.sp.value.dp * 1.1f,
-                end = 18.sp.value.dp / 2
+                start = labelFondSize.fontSize.value.dp * 1.1f,
+                end = labelFondSize.fontSize.value.dp / 2
             )
     ) {
-        Text(text = text, fontSize = 18.sp, fontWeight = FontWeight.W300, color = Color.White)
+        Text(text = text, fontSize = labelFondSize.fontSize, fontWeight = FontWeight.W300, color = Color.White)
     }
 }
 

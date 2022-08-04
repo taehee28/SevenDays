@@ -77,13 +77,13 @@ private fun CardContent(
         Column {
             Text(
                 text = "7일 동안",
-                style = MaterialTheme.typography.caption,
+                style = MaterialTheme.typography.overline,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
 
             Text(
                 text = title,
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.h6,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -94,13 +94,13 @@ private fun CardContent(
             if (challengingDays > 7) {
                 Text(
                     text = "도전 종료",
-                    style = MaterialTheme.typography.body2.copy(color = Color.Blue),
+                    style = MaterialTheme.typography.caption.copy(color = Color.Blue),
                     modifier = Modifier.alpha(ContentAlpha.medium)
                 )
             } else {
                 Text(
                     text = "${challengingDays}일째 도전 중!",
-                    style = MaterialTheme.typography.body2.copy(color = Color.Red),
+                    style = MaterialTheme.typography.caption.copy(color = Color.Red),
                     modifier = Modifier.alpha(ContentAlpha.medium)
                 )
             }
