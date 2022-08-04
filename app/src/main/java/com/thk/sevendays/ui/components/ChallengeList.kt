@@ -27,7 +27,7 @@ import java.time.LocalDate
 @Composable
 fun ChallengeList(
     challenges: List<Challenge>,
-    onChallengeClick: (String) -> Unit
+    onChallengeClick: (Int) -> Unit
 ) {
     LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxHeight()) {
         items(items = challenges) { challenge ->
@@ -43,7 +43,7 @@ fun ChallengeList(
 @Composable
 fun ChallengeCard(
     challenge: Challenge,
-    onChallengeClick: ((String) -> Unit)? = null,
+    onChallengeClick: ((Int) -> Unit)? = null,
 ) {
     val challengingDays = LocalDate.now().challengingDaysFrom(startDate = challenge.startDate)
     val backgroundColor = if (challengingDays > 7) {
@@ -56,7 +56,7 @@ fun ChallengeCard(
         enabled = onChallengeClick != null,
         onClick = {
             if (onChallengeClick != null) {
-                onChallengeClick(challenge.challengeId.toString())
+                onChallengeClick(challenge.challengeId)
             }
         },
         shape = RoundedCornerShape(16.dp),

@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,
-    ExperimentalAnimationApi::class
-)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,)
 
 package com.thk.sevendays.ui
 
@@ -50,8 +48,9 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
         ) {
             SevenDaysNavHost(
                 navController = navController,
-                challenges = sampleChallengeList,
-                onAddChallenge = challengeViewModel::addChallenge
+                challenges = challengeViewModel.challenges,
+                onAddChallenge = challengeViewModel::addChallenge,
+                getChallengeById = challengeViewModel::getChallengeById
             )
         }
     }
@@ -123,6 +122,7 @@ private fun SevenDaysNavHost(
     navController: NavHostController,
     challenges: List<Challenge>,
     onAddChallenge: (Challenge) -> Unit,
+    getChallengeById: (Int) -> Challenge?
 ) {
     NavHost(
         navController = navController,
@@ -142,12 +142,13 @@ private fun SevenDaysNavHost(
             route = "${SevenDaysScreen.Detail.name}/{id}",
             arguments = listOf(
                 navArgument("id") {
-                    type = NavType.StringType
+                    type = NavType.IntType
                 }
             )
         ) { entry ->
-            val id = entry.arguments?.getString("id") ?: "null"
-            ChallengeDetailScreen(id = id)
+            val id = entry.arguments?.getInt("id", -1) ?: -1
+            val challenge = getChallengeById(id)
+            ChallengeDetailScreen(challenge)
         }
     }
 }

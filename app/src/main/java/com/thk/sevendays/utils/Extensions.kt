@@ -14,6 +14,6 @@ fun LocalDate.challengingDaysFrom(startDate: LocalDate): Int {
     return ChronoUnit.DAYS.between(startDate, this).toInt() + 1
 }
 
-fun NavController.navigateToDetail(id: String) {
+fun NavController.navigateToDetail(id: Int) {
     navigate("${SevenDaysScreen.Detail.name}/$id")
 }
