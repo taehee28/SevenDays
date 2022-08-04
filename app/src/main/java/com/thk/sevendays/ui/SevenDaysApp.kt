@@ -1,4 +1,6 @@
-@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,
+    ExperimentalAnimationApi::class
+)
 
 package com.thk.sevendays.ui
 
