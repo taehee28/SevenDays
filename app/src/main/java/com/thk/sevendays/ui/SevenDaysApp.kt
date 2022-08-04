@@ -25,14 +25,14 @@ import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.SevenDaysScreen
 import com.thk.sevendays.data.ChallengeViewModel
-import com.thk.sevendays.ui.theme.SevenDaysTheme
+import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.utils.navigateToDetail
 
 @Composable
 fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
     val navController = rememberNavController()
 
-    SevenDaysTheme {
+    SevenDaysAppTheme {
         Scaffold(
             topBar = {
                 NavigationTopAppBar(

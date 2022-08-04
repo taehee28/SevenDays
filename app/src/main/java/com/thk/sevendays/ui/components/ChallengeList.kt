@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
+import com.thk.sevendays.ui.theme.*
 import com.thk.sevendays.utils.challengingDaysFrom
 import java.time.LocalDate
 
@@ -44,7 +45,13 @@ fun ChallengeCard(
     challenge: Challenge,
     onChallengeClick: ((String) -> Unit)? = null,
 ) {
-    // TODO: 2022/02/26 종료된 도전 카드 색 disable한 색으로 변경하기  
+    val challengingDays = LocalDate.now().challengingDaysFrom(startDate = challenge.startDate)
+    val backgroundColor = if (challengingDays > 7) {
+        SevenDaysTheme.colors.finishedBackground
+    } else {
+        SevenDaysTheme.colors.inChallengeBackground
+    }
+
     Card(
         enabled = onChallengeClick != null,
         onClick = {
@@ -57,18 +64,17 @@ fun ChallengeCard(
         modifier = Modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth(),
+        backgroundColor = backgroundColor
     ) {
-        CardContent(challenge.title, challenge.startDate)
+        CardContent(challenge.title, challengingDays)
     }
 }
 
 @Composable
 private fun CardContent(
     title: String,
-    startDate: LocalDate
+    challengingDays: Int
 ) {
-    val challengingDays = LocalDate.now().challengingDaysFrom(startDate = startDate)
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -90,18 +96,15 @@ private fun CardContent(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // TODO: 2022/02/26 나중에 다른 색으로 변경하기
             if (challengingDays > 7) {
                 Text(
                     text = "도전 종료",
-                    style = MaterialTheme.typography.caption.copy(color = Color.Blue),
-                    modifier = Modifier.alpha(ContentAlpha.medium)
+                    style = MaterialTheme.typography.caption.copy(color = SevenDaysTheme.colors.finishedFontColor),
                 )
             } else {
                 Text(
                     text = "${challengingDays}일째 도전 중!",
-                    style = MaterialTheme.typography.caption.copy(color = Color.Red),
-                    modifier = Modifier.alpha(ContentAlpha.medium)
+                    style = MaterialTheme.typography.caption.copy(color = SevenDaysTheme.colors.inChallengeFontColor),
                 )
             }
         }

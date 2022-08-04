@@ -5,18 +5,19 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Red100,
+    primaryVariant = Red300,
+    secondary = Blue300
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Red200,
+    primaryVariant = Red300,
+    secondary = Blue300
 
     /* Other default colors to override
     background = Color.White,
@@ -29,11 +30,17 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun SevenDaysTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
+fun SevenDaysAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    val sevenDaysColors = if (darkTheme) {
+        SevenDaysDarkPalette
+    } else {
+        SevenDaysLightPalette
     }
 
     val systemUiController = rememberSystemUiController()
@@ -43,6 +50,11 @@ fun SevenDaysTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
         colors = colors,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = {
+            CompositionLocalProvider(
+                LocalSevenDaysColors provides sevenDaysColors,
+                content = content
+            )
+        }
     )
 }

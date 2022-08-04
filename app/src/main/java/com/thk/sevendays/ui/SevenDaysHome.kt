@@ -22,7 +22,8 @@ import com.thk.sevendays.ui.components.ChallengeList
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.thk.data.model.Challenge
-import java.time.LocalDate
+import com.thk.data.model.sampleChallengeList
+import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -60,9 +61,19 @@ fun SevenDaysHome(
 @ExperimentalComposeUiApi
 @Preview
 @Composable
-private fun SevenDaysScreenPreview() {
-    MaterialTheme {
-        SevenDaysHome(challenges = emptyList(), onAddChallenge = {}, onChallengeClick = {})
+private fun SevenDaysScreenPreview_light() {
+    SevenDaysAppTheme(darkTheme = false) {
+        SevenDaysHome(challenges = sampleChallengeList, onAddChallenge = {}, onChallengeClick = {})
+    }
+}
+
+@ExperimentalAnimationApi
+@ExperimentalComposeUiApi
+@Preview
+@Composable
+private fun SevenDaysScreenPreview_dark() {
+    SevenDaysAppTheme(darkTheme = true) {
+        SevenDaysHome(challenges = sampleChallengeList, onAddChallenge = {}, onChallengeClick = {})
     }
 }
 
@@ -172,11 +183,4 @@ private fun AddChallengeDialogContent(challengeTitle: String, onTitleChange: (St
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
     )
-}
-
-@Preview
-@Composable
-private fun AddChallengeDialogContentPreview() {
-    MaterialTheme {
-    }
 }
