@@ -15,7 +15,7 @@ fun sevenDaysLightColors(
     inChallengeFontColor: Color = Red300,
     inChallengeBackground: Color = Color.White,
     finishedFontColor: Color = Indigo400,
-    finishedBackground: Color = Color(0xFFFAFBFF)
+    finishedBackground: Color = Grey100
 ): SevenDaysColors = SevenDaysColors(
     inChallengeFontColor,
     inChallengeBackground,
@@ -27,7 +27,7 @@ fun sevenDaysDarkColors(
     inChallengeFontColor: Color = Red200,
     inChallengeBackground: Color = Color(0xFF121212),
     finishedFontColor: Color = Indigo300,
-    finishedBackground: Color = Color(0xFF121213)
+    finishedBackground: Color = Color(0xFF0a0a0a)
 ): SevenDaysColors = SevenDaysColors(
     inChallengeFontColor,
     inChallengeBackground,
