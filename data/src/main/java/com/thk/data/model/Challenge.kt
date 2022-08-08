@@ -1,11 +1,22 @@
 package com.thk.data.model
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.thk.data.database.DatabaseInfo
 import java.time.LocalDate
 import java.util.*
 
+@Entity(tableName = DatabaseInfo.TABLE_NAME_CHALLENGE)
 data class Challenge(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_CHALLENGE_ID)
     val challengeId : Int = 0,
+
+    @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_TITLE)
     val title: String,
+
+    @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_START_DATE)
     val startDate: LocalDate = LocalDate.now()
 )
 
