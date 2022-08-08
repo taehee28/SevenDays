@@ -121,7 +121,7 @@ private fun NavController.rememberPreviousBackStackEntryAsState(): State<NavBack
 private fun SevenDaysNavHost(
     navController: NavHostController,
     challenges: List<Challenge>,
-    onAddChallenge: (Challenge) -> Unit,
+    onAddChallenge: (String) -> Unit,
     getChallengeById: (Int) -> Challenge?
 ) {
     NavHost(

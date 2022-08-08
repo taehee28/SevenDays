@@ -6,7 +6,7 @@ import java.util.*
 data class Challenge(
     val challengeId : Int = 0,
     val title: String,
-    val startDate: LocalDate
+    val startDate: LocalDate = LocalDate.now()
 )
 
 val sampleChallengeList = listOf(

@@ -30,7 +30,7 @@ import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 @Composable
 fun SevenDaysHome(
     challenges: List<Challenge>,
-    onAddChallenge: (Challenge) -> Unit,
+    onAddChallenge: (String) -> Unit,
     onChallengeClick: (Int) -> Unit
 ) {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
@@ -48,12 +48,13 @@ fun SevenDaysHome(
             challenges = challenges,
             onChallengeClick = onChallengeClick
         )
-        
-        AddChallengeDialog(
-            showDialog = showDialog,
-            setShowDialog = setShowDialog,
-            onAddChallenge = onAddChallenge
-        )
+
+        AnimatedVisibility(visible = showDialog) {
+            AddChallengeDialog(
+                setShowDialog = setShowDialog,
+                onAddChallenge = onAddChallenge
+            )
+        }
     }
 }
 
@@ -81,18 +82,13 @@ private fun SevenDaysScreenPreview_dark() {
 @ExperimentalComposeUiApi
 @Composable
 private fun AddChallengeDialog(
-    showDialog: Boolean,
     setShowDialog: (Boolean) -> Unit,
-    onAddChallenge: (Challenge) -> Unit
+    onAddChallenge: (String) -> Unit
 ) {
-    AnimatedVisibility(
-        visible = showDialog,
-    ) {
-        Dialog_Alert(
-            setShowDialog = setShowDialog,
-            onAddChallenge = onAddChallenge
-        )
-    }
+    Dialog_Alert(
+        setShowDialog = setShowDialog,
+        onAddChallenge = onAddChallenge
+    )
 }
 
 @ExperimentalComposeUiApi
@@ -129,7 +125,7 @@ private fun Dialog_FullScreen(setShowDialog: (Boolean) -> Unit) {
 @Composable
 private fun Dialog_Alert(
     setShowDialog: (Boolean) -> Unit,
-    onAddChallenge: (Challenge) -> Unit,
+    onAddChallenge: (String) -> Unit,
 ) {
     var challengeTitle by rememberSaveable { mutableStateOf("") }
 
@@ -163,6 +159,7 @@ private fun Dialog_Alert(
                 TextButton(
                     onClick = {
                         // TODO: room에 데이터 추가 하도록 구현하기
+                        onAddChallenge(challengeTitle)
                         setShowDialog(false)
                     }
                 ) {
