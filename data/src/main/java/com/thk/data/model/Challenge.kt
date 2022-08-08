@@ -11,7 +11,7 @@ import java.util.*
 data class Challenge(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_CHALLENGE_ID)
-    val challengeId : Int = 0,
+    val challengeId : Long = 0,
 
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_TITLE)
     val title: String,

@@ -31,7 +31,7 @@ import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 fun SevenDaysHome(
     challenges: List<Challenge>,
     onAddChallenge: (String) -> Unit,
-    onChallengeClick: (Int) -> Unit
+    onChallengeClick: (Long) -> Unit
 ) {
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 

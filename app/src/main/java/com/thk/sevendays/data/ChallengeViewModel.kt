@@ -12,5 +12,5 @@ class ChallengeViewModel: ViewModel() {
         challenges.add(Challenge(title = title))
     }
 
-    fun getChallengeById(id: Int) = challenges.firstOrNull { it.challengeId == id }
+    fun getChallengeById(id: Long) = challenges.firstOrNull { it.challengeId == id }
 }

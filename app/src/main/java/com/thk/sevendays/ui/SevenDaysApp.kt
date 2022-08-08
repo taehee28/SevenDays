@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class,)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 
 package com.thk.sevendays.ui
 
@@ -122,7 +122,7 @@ private fun SevenDaysNavHost(
     navController: NavHostController,
     challenges: List<Challenge>,
     onAddChallenge: (String) -> Unit,
-    getChallengeById: (Int) -> Challenge?
+    getChallengeById: (Long) -> Challenge?
 ) {
     NavHost(
         navController = navController,
@@ -142,11 +142,11 @@ private fun SevenDaysNavHost(
             route = "${SevenDaysScreen.Detail.name}/{id}",
             arguments = listOf(
                 navArgument("id") {
-                    type = NavType.IntType
+                    type = NavType.LongType
                 }
             )
         ) { entry ->
-            val id = entry.arguments?.getInt("id", -1) ?: -1
+            val id = entry.arguments?.getLong("id", -1) ?: -1
             val challenge = getChallengeById(id)
             ChallengeDetailScreen(challenge)
         }

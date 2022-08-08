@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ChallengeRepository {
     fun getChallenges(): Flow<List<Challenge>>
     suspend fun addChallenge(content: String)
-    suspend fun removeChallenge(challengeId: Int)
+    suspend fun removeChallenge(challengeId: Long)
 }

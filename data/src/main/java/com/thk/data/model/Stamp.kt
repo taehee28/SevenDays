@@ -19,7 +19,7 @@ import java.time.LocalDate
 )
 data class Stamp(
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_CHALLENGE_ID, index = true)
-    val challengeId: Int,
+    val challengeId: Long,
 
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_IS_CHECKED)
     val isChecked: Boolean,
