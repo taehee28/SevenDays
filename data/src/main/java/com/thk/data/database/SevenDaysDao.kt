@@ -25,7 +25,7 @@ interface StampDao {
     suspend fun getStamps(challengeId: Long): List<Stamp>
 
     @Insert(onConflict = REPLACE)
-    suspend fun addStamps(vararg stamp: Stamp): List<Int>
+    suspend fun addStamps(vararg stamp: Stamp): List<Long>
 
     @Update
     suspend fun updateStampChecked(stamp: Stamp)

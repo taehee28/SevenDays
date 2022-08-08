@@ -3,6 +3,7 @@ package com.thk.data.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
 import com.thk.data.database.DatabaseInfo
 import java.time.LocalDate
 
@@ -21,6 +22,10 @@ data class Stamp(
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_CHALLENGE_ID, index = true)
     val challengeId: Long,
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_STAMP_ID)
+    val stampId: Long = 0,
+
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_IS_CHECKED)
     val isChecked: Boolean,
 
@@ -29,11 +34,11 @@ data class Stamp(
 )
 
 val sampleStampList = listOf(
-    Stamp(0, true, LocalDate.now().minusDays(3)),
-    Stamp(0, false, LocalDate.now().minusDays(2)),
-    Stamp(0, true, LocalDate.now().minusDays(1)),
-    Stamp(0, false, LocalDate.now()),
-    Stamp(0, false, LocalDate.now().plusDays(1)),
-    Stamp(0, false, LocalDate.now().plusDays(2)),
-    Stamp(0, false, LocalDate.now().plusDays(3)),
+    Stamp(challengeId = 0, isChecked = true, date = LocalDate.now().minusDays(3)),
+    Stamp(challengeId = 0, isChecked = false, date = LocalDate.now().minusDays(2)),
+    Stamp(challengeId = 0, isChecked = true, date = LocalDate.now().minusDays(1)),
+    Stamp(challengeId = 0, isChecked = false, date = LocalDate.now()),
+    Stamp(challengeId = 0, isChecked = false, date = LocalDate.now().plusDays(1)),
+    Stamp(challengeId = 0, isChecked = false, date = LocalDate.now().plusDays(2)),
+    Stamp(challengeId = 0, isChecked = false, date = LocalDate.now().plusDays(3)),
 )

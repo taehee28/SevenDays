@@ -10,6 +10,7 @@ object DatabaseInfo {
     const val COLUMN_NAME_CHALLENGE_ID = "challenge_id"
     const val COLUMN_NAME_TITLE = "title"
     const val COLUMN_NAME_START_DATE = "start_date"
+    const val COLUMN_NAME_STAMP_ID = "stamp_id"
     const val COLUMN_NAME_IS_CHECKED = "is_checked"
     const val COLUMN_NAME_DATE = "date"
 }
