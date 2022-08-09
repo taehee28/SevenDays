@@ -9,6 +9,7 @@ import com.thk.data.database.SevenDaysDatabase
 import com.thk.data.database.StampDao
 import com.thk.data.datasource.LocalDataSource
 import com.thk.data.datasource.LocalDataSourceImpl
+import com.thk.data.repository.ChallengeRepository
 import com.thk.data.repository.ChallengeRepositoryImpl
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,7 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Singleton
     @Provides
-    fun provideChallengeRepository(dataSource: LocalDataSource) =
+    fun provideChallengeRepository(dataSource: LocalDataSource): ChallengeRepository =
         ChallengeRepositoryImpl(dataSource)
 }
 
@@ -35,7 +36,7 @@ object DataSourceModule {
     fun provideLocalDataSource(
         challengeDao: ChallengeDao,
         stampDao: StampDao
-    ) = LocalDataSourceImpl(challengeDao, stampDao)
+    ): LocalDataSource = LocalDataSourceImpl(challengeDao, stampDao)
 }
 
 @Module
