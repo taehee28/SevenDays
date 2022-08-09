@@ -7,9 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -19,20 +17,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.thk.sevendays.ui.components.ChallengeList
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.emptyFlow
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @Composable
 fun SevenDaysHome(
-    challenges: List<Challenge>,
+    challengesFlow: StateFlow<List<Challenge>>,
     onAddChallenge: (String) -> Unit,
     onChallengeClick: (Long) -> Unit
 ) {
+    val challenges by challengesFlow.collectAsState()
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -64,7 +64,7 @@ fun SevenDaysHome(
 @Composable
 private fun SevenDaysScreenPreview_light() {
     SevenDaysAppTheme(darkTheme = false) {
-        SevenDaysHome(challenges = sampleChallengeList, onAddChallenge = {}, onChallengeClick = {})
+        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {})
     }
 }
 
@@ -74,7 +74,7 @@ private fun SevenDaysScreenPreview_light() {
 @Composable
 private fun SevenDaysScreenPreview_dark() {
     SevenDaysAppTheme(darkTheme = true) {
-        SevenDaysHome(challenges = sampleChallengeList, onAddChallenge = {}, onChallengeClick = {})
+        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {})
     }
 }
 
@@ -158,7 +158,6 @@ private fun Dialog_Alert(
                 }
                 TextButton(
                     onClick = {
-                        // TODO: room에 데이터 추가 하도록 구현하기
                         onAddChallenge(challengeTitle)
                         setShowDialog(false)
                     }

@@ -25,6 +25,7 @@ import com.thk.sevendays.SevenDaysScreen
 import com.thk.sevendays.data.ChallengeViewModel
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.utils.navigateToDetail
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
@@ -59,7 +60,7 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
 @Preview
 @Composable
 private fun SevenDaysAppPreview() {
-    SevenDaysApp(challengeViewModel = ChallengeViewModel())
+//    SevenDaysApp(challengeViewModel = ChallengeViewModel())
 }
 
 @Composable
@@ -120,7 +121,7 @@ private fun NavController.rememberPreviousBackStackEntryAsState(): State<NavBack
 @Composable
 private fun SevenDaysNavHost(
     navController: NavHostController,
-    challenges: List<Challenge>,
+    challenges: StateFlow<List<Challenge>>,
     onAddChallenge: (String) -> Unit,
     getChallengeById: (Long) -> Challenge?
 ) {
@@ -131,7 +132,7 @@ private fun SevenDaysNavHost(
         // 메인 리스트 화면
         composable(route = SevenDaysScreen.Home.name) {
             SevenDaysHome(
-                challenges = challenges,
+                challengesFlow = challenges,
                 onAddChallenge = onAddChallenge,
                 onChallengeClick = { navController.navigateToDetail(it) }
             )
