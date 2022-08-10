@@ -51,6 +51,7 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
                 navController = navController,
                 challenges = challengeViewModel.challenges,
                 onAddChallenge = challengeViewModel::addChallenge,
+                onRemoveChallenge = challengeViewModel::removeChallenge,
                 getChallengeById = challengeViewModel::getChallengeById
             )
         }
@@ -123,6 +124,7 @@ private fun SevenDaysNavHost(
     navController: NavHostController,
     challenges: StateFlow<List<Challenge>>,
     onAddChallenge: (String) -> Unit,
+    onRemoveChallenge: (Long) -> Unit,
     getChallengeById: (Long) -> Challenge?
 ) {
     NavHost(
@@ -134,6 +136,7 @@ private fun SevenDaysNavHost(
             SevenDaysHome(
                 challengesFlow = challenges,
                 onAddChallenge = onAddChallenge,
+                onRemoveChallenge = onRemoveChallenge,
                 onChallengeClick = { navController.navigateToDetail(it) }
             )
         }

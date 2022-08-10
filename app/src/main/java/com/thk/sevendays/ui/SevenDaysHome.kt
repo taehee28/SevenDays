@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.emptyFlow
 fun SevenDaysHome(
     challengesFlow: StateFlow<List<Challenge>>,
     onAddChallenge: (String) -> Unit,
+    onRemoveChallenge: (Long) -> Unit,
     onChallengeClick: (Long) -> Unit
 ) {
     val challenges by challengesFlow.collectAsState()
@@ -46,7 +47,8 @@ fun SevenDaysHome(
     ) {
         ChallengeList(
             challenges = challenges,
-            onChallengeClick = onChallengeClick
+            onChallengeClick = onChallengeClick,
+            onRemoveChallenge = onRemoveChallenge
         )
 
         AnimatedVisibility(visible = showDialog) {
@@ -64,7 +66,7 @@ fun SevenDaysHome(
 @Composable
 private fun SevenDaysScreenPreview_light() {
     SevenDaysAppTheme(darkTheme = false) {
-        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {})
+        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {}, onRemoveChallenge = {})
     }
 }
 
@@ -74,7 +76,7 @@ private fun SevenDaysScreenPreview_light() {
 @Composable
 private fun SevenDaysScreenPreview_dark() {
     SevenDaysAppTheme(darkTheme = true) {
-        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {})
+        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {}, onRemoveChallenge = {})
     }
 }
 

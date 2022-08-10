@@ -1,20 +1,21 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.thk.sevendays.ui.components
 
-import android.util.Log
-import androidx.compose.foundation.background
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,23 +28,32 @@ import java.time.LocalDate
 @Composable
 fun ChallengeList(
     challenges: List<Challenge>,
-    onChallengeClick: (Long) -> Unit
+    onChallengeClick: (Long) -> Unit,
+    onRemoveChallenge: ((Long) -> Unit)? = null
 ) {
     LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxHeight()) {
-        items(items = challenges) { challenge ->
+        items(
+            items = challenges,
+            key = { it.challengeId }
+        ) { challenge ->
             ChallengeCard(
                 challenge = challenge,
-                onChallengeClick = onChallengeClick
+                modifier = Modifier.animateItemPlacement(animationSpec = tween(300)),
+                onChallengeClick = onChallengeClick,
+                onRemoveChallenge = onRemoveChallenge
             )
         }
     }
 }
 
+// TODO: stateless한 버전의 컴포저블 만들기
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ChallengeCard(
     challenge: Challenge,
+    modifier: Modifier = Modifier,
     onChallengeClick: ((Long) -> Unit)? = null,
+    onRemoveChallenge: ((Long) -> Unit)? = null
 ) {
     val challengingDays = LocalDate.now().challengingDaysFrom(startDate = challenge.startDate)
     val backgroundColor = if (challengingDays > 7) {
@@ -51,6 +61,8 @@ fun ChallengeCard(
     } else {
         SevenDaysTheme.colors.inChallengeBackground
     }
+
+    var menuExpanded by remember { mutableStateOf(false) }
 
     Card(
         enabled = onChallengeClick != null,
@@ -61,19 +73,45 @@ fun ChallengeCard(
         },
         shape = RoundedCornerShape(16.dp),
         elevation = 3.dp,
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth(),
         backgroundColor = backgroundColor
     ) {
-        CardContent(challenge.title, challengingDays)
+        CardContent(
+            title = challenge.title,
+            challengingDays = challengingDays,
+            menu = onRemoveChallenge?.let { {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "menu",
+                    modifier = Modifier
+                        .alpha(0.5f)
+                        .clickable { menuExpanded = true }
+                )
+                DropdownMenu(
+                    expanded = menuExpanded,
+                    onDismissRequest = { menuExpanded = false }
+                ) {
+                    DropdownMenuItem(
+                        onClick = {
+                            menuExpanded = false
+                            onRemoveChallenge(challenge.challengeId)
+                        }
+                    ) {
+                        Text(text = "삭제하기")
+                    }
+                }
+            } }
+        )
     }
 }
 
 @Composable
 private fun CardContent(
     title: String,
-    challengingDays: Int
+    challengingDays: Int,
+    menu: @Composable (BoxScope.() -> Unit)? = null
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -109,6 +147,9 @@ private fun CardContent(
             }
         }
 
+        if (menu != null) {
+            Box(modifier = Modifier.align(Alignment.Top), content = menu)
+        }
     }
 }
 

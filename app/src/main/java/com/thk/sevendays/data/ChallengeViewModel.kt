@@ -28,5 +28,9 @@ class ChallengeViewModel @Inject constructor(
         challengeRepository.addChallenge(title)
     }
 
+    fun removeChallenge(id: Long) = viewModelScope.launch {
+        challengeRepository.removeChallenge(id)
+    }
+
     fun getChallengeById(id: Long) = challenges.value.firstOrNull { it.challengeId == id }
 }
