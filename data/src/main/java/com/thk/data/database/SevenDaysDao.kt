@@ -12,7 +12,7 @@ interface ChallengeDao {
     @Query("SELECT * FROM ${DatabaseInfo.TABLE_NAME_CHALLENGE}")
     fun getChallenges(): Flow<List<Challenge>>
 
-    @Insert(onConflict = IGNORE)
+    @Insert
     suspend fun addChallenge(challenge: Challenge): Long
 
     @Query("DELETE FROM ${DatabaseInfo.TABLE_NAME_CHALLENGE} WHERE ${DatabaseInfo.COLUMN_NAME_CHALLENGE_ID} = :challengeId")
