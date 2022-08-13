@@ -22,6 +22,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.thk.sevendays.ui.components.ChallengeList
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
+import com.thk.sevendays.data.UiState
 import com.thk.sevendays.ui.theme.Grey200
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,12 +33,12 @@ import kotlinx.coroutines.flow.emptyFlow
 @ExperimentalComposeUiApi
 @Composable
 fun SevenDaysHome(
-    challengesFlow: StateFlow<List<Challenge>>,
+    uiStateFlow: StateFlow<UiState<List<Challenge>>>,
     onAddChallenge: (String) -> Unit,
     onRemoveChallenge: (Long) -> Unit,
     onChallengeClick: (Long) -> Unit
 ) {
-    val challenges by challengesFlow.collectAsState()
+    val uiState by uiStateFlow.collectAsState()
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -49,21 +50,43 @@ fun SevenDaysHome(
             }
         }
     ) {
-        
-        if (challenges.isEmpty()) {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = "진행 중인 도전이 없습니다!\n새로운 도전을 추가해주세요.",
-                    textAlign = TextAlign.Center,
-                    color = Color.Gray,
+        when (val state = uiState) {
+            is UiState.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            is UiState.Success -> {
+                AnimatedVisibility(
+                    visible = state.data.isEmpty(),
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    Box(
+                        Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "진행 중인 도전이 없습니다!\n새로운 도전을 추가해주세요.",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.body2,
+                            color = Color.Gray,
+                        )
+                    }
+                }
+
+                ChallengeList(
+                    challenges = state.data,
+                    onChallengeClick = onChallengeClick,
+                    onRemoveChallenge = onRemoveChallenge
                 )
             }
-        } else {
-            ChallengeList(
-                challenges = challenges,
-                onChallengeClick = onChallengeClick,
-                onRemoveChallenge = onRemoveChallenge
-            )
+            is UiState.Error -> {
+
+            }
         }
 
         AnimatedVisibility(visible = showDialog) {
@@ -81,7 +104,12 @@ fun SevenDaysHome(
 @Composable
 private fun SevenDaysScreenPreview_light() {
     SevenDaysAppTheme(darkTheme = false) {
-        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {}, onRemoveChallenge = {})
+        SevenDaysHome(
+            onAddChallenge = {},
+            onChallengeClick = {},
+            onRemoveChallenge = {},
+            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList))
+        )
     }
 }
 
@@ -91,7 +119,12 @@ private fun SevenDaysScreenPreview_light() {
 @Composable
 private fun SevenDaysScreenPreview_dark() {
     SevenDaysAppTheme(darkTheme = true) {
-        SevenDaysHome(challengesFlow = MutableStateFlow(emptyList()), onAddChallenge = {}, onChallengeClick = {}, onRemoveChallenge = {})
+        SevenDaysHome(
+            onAddChallenge = {},
+            onChallengeClick = {},
+            onRemoveChallenge = {},
+            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList))
+        )
     }
 }
 

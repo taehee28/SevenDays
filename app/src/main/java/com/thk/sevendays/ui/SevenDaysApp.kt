@@ -124,7 +124,7 @@ private fun SevenDaysNavHost(
         // 메인 리스트 화면
         composable(route = SevenDaysScreen.Home.name) {
             SevenDaysHome(
-                challengesFlow = challengeViewModel.challenges,
+                uiStateFlow = challengeViewModel.uiState,
                 onAddChallenge = challengeViewModel::addChallenge,
                 onRemoveChallenge = challengeViewModel::removeChallenge,
                 onChallengeClick = { navController.navigateToDetail(it) }
