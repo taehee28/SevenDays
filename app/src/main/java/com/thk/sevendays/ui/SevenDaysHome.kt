@@ -155,7 +155,7 @@ private fun Dialog_Alert(
                     text = "새 도전 추가하기",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h6
+                    style = MaterialTheme.typography.subtitle1
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 AddChallengeDialogContent(
