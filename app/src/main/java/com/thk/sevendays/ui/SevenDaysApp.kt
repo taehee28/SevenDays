@@ -12,22 +12,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.thk.data.model.Challenge
-import com.thk.data.model.Stamp
-import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.SevenDaysScreen
 import com.thk.sevendays.data.ChallengeViewModel
 import com.thk.sevendays.data.StampViewModel
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.utils.navigateToDetail
-import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SevenDaysApp(
@@ -148,9 +143,13 @@ private fun SevenDaysNavHost(
             val id = entry.arguments?.getLong("id", -1) ?: -1
             val challenge = challengeViewModel.getChallengeById(id)
 
+            stampViewModel.getStamps(id)
+
             ChallengeDetailScreen(
                 challenge = challenge,
+                uiStateFlow = stampViewModel.uiState,
                 setStampChecked = stampViewModel::setStampChecked,
+                onDisposed = stampViewModel::clearUiState
             )
         }
     }

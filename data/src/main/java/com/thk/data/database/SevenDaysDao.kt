@@ -22,7 +22,7 @@ interface ChallengeDao {
 @Dao
 interface StampDao {
     @Query("SELECT * FROM ${DatabaseInfo.TABLE_NAME_STAMP} WHERE ${DatabaseInfo.COLUMN_NAME_CHALLENGE_ID} = :challengeId")
-    suspend fun getStamps(challengeId: Long): List<Stamp>
+    fun getStamps(challengeId: Long): Flow<List<Stamp>>
 
     @Insert(onConflict = REPLACE)
     suspend fun addStamps(vararg stamp: Stamp): List<Long>
