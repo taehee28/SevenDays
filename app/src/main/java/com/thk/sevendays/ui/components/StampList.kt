@@ -49,6 +49,7 @@ private enum class NodePosition {
 @Composable
 fun ChallengeStampCard(
     stamps: List<Stamp>,
+    setStampChecked: (Stamp) -> Unit,
     header: @Composable LazyItemScope.() -> Unit = {}
 ) {
     LazyColumn(
@@ -61,41 +62,9 @@ fun ChallengeStampCard(
         item(content = header)
 
         item { 
-            StampListCard(stamps = stamps)
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun ChallengeStampCardPreview() {
-    ChallengeStampCard(stamps = sampleStampList)
-}
-
-@Composable
-fun LabeledStampList(
-    stamps: List<Stamp>,
-    header: @Composable LazyItemScope.() -> Unit = {}
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(16.dp)
-    ) {
-        item(content = header)
-
-        itemsIndexed(
-            items = stamps
-        ) { index, item ->
-            LabeledStampBox(
-                stamp = item,
-                nodePosition = when (index) {
-                    stamps.firstIndex -> NodePosition.Start
-                    stamps.lastIndex -> NodePosition.End
-                    else -> NodePosition.Middle
-                }
+            StampListCard(
+                stamps = stamps,
+                setStampChecked = setStampChecked
             )
         }
     }
@@ -103,13 +72,14 @@ fun LabeledStampList(
 
 @Preview
 @Composable
-private fun StampListPreview() {
-//    LabeledStampList(sampleStampList)
+private fun ChallengeStampCardPreview() {
+    ChallengeStampCard(stamps = sampleStampList, setStampChecked = {})
 }
 
 @Composable
 private fun StampListCard(
-    stamps: List<Stamp>
+    stamps: List<Stamp>,
+    setStampChecked: (Stamp) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -123,6 +93,7 @@ private fun StampListCard(
             for ((index, item) in stamps.withIndex()) {
                 LabeledStampBox(
                     stamp = item,
+                    setStampChecked = setStampChecked,
                     nodePosition = when (index) {
                         stamps.firstIndex -> NodePosition.Start
                         stamps.lastIndex -> NodePosition.End
@@ -137,12 +108,13 @@ private fun StampListCard(
 @Preview
 @Composable
 private fun StampListCardPreview() {
-    StampListCard(sampleStampList)
+    StampListCard(sampleStampList, {})
 }
 
 @Composable
 private fun LabeledStampBox(
     stamp: Stamp,
+    setStampChecked: (Stamp) -> Unit,
     nodePosition: NodePosition = NodePosition.Middle
 ) {
     Row(
@@ -150,7 +122,12 @@ private fun LabeledStampBox(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
-        StampBox(isChecked = stamp.isChecked, clickable = stamp.date.isToday(), nodePosition = nodePosition)
+        StampBox(
+            isChecked = stamp.isChecked,
+            clickable = stamp.date.isToday(),
+            onCheckedChanged = { setStampChecked(stamp.copy(isChecked = it)) },
+            nodePosition = nodePosition
+        )
 
         Spacer(modifier = Modifier.width(24.dp))
 
@@ -169,7 +146,7 @@ private fun LabeledStampBox(
 @Preview
 @Composable
 private fun LabeledStampBoxPreview() {
-    LabeledStampBox(sampleStampList[0])
+    LabeledStampBox(sampleStampList[0], {})
 }
 
 @Composable
@@ -250,6 +227,7 @@ private fun StampBox(
                 ) {
                     if (clickable) {
                         checkedState.value = !checkedState.value
+                        onCheckedChanged(checkedState.value)
                     } else {
                         Toast
                             .makeText(context, "오늘 날짜만 수정할 수 있습니다!", Toast.LENGTH_SHORT)

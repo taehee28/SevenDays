@@ -20,15 +20,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.thk.data.model.Challenge
+import com.thk.data.model.Stamp
 import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.SevenDaysScreen
 import com.thk.sevendays.data.ChallengeViewModel
+import com.thk.sevendays.data.StampViewModel
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.utils.navigateToDetail
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
-fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
+fun SevenDaysApp(
+    challengeViewModel: ChallengeViewModel,
+    stampViewModel: StampViewModel,
+) {
     val navController = rememberNavController()
 
     SevenDaysAppTheme {
@@ -49,19 +54,11 @@ fun SevenDaysApp(challengeViewModel: ChallengeViewModel) {
         ) {
             SevenDaysNavHost(
                 navController = navController,
-                challenges = challengeViewModel.challenges,
-                onAddChallenge = challengeViewModel::addChallenge,
-                onRemoveChallenge = challengeViewModel::removeChallenge,
-                getChallengeById = challengeViewModel::getChallengeById
+                challengeViewModel = challengeViewModel,
+                stampViewModel = stampViewModel
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun SevenDaysAppPreview() {
-//    SevenDaysApp(challengeViewModel = ChallengeViewModel())
 }
 
 @Composable
@@ -122,10 +119,8 @@ private fun NavController.rememberPreviousBackStackEntryAsState(): State<NavBack
 @Composable
 private fun SevenDaysNavHost(
     navController: NavHostController,
-    challenges: StateFlow<List<Challenge>>,
-    onAddChallenge: (String) -> Unit,
-    onRemoveChallenge: (Long) -> Unit,
-    getChallengeById: (Long) -> Challenge?
+    challengeViewModel: ChallengeViewModel,
+    stampViewModel: StampViewModel
 ) {
     NavHost(
         navController = navController,
@@ -134,9 +129,9 @@ private fun SevenDaysNavHost(
         // 메인 리스트 화면
         composable(route = SevenDaysScreen.Home.name) {
             SevenDaysHome(
-                challengesFlow = challenges,
-                onAddChallenge = onAddChallenge,
-                onRemoveChallenge = onRemoveChallenge,
+                challengesFlow = challengeViewModel.challenges,
+                onAddChallenge = challengeViewModel::addChallenge,
+                onRemoveChallenge = challengeViewModel::removeChallenge,
                 onChallengeClick = { navController.navigateToDetail(it) }
             )
         }
@@ -151,8 +146,12 @@ private fun SevenDaysNavHost(
             )
         ) { entry ->
             val id = entry.arguments?.getLong("id", -1) ?: -1
-            val challenge = getChallengeById(id)
-            ChallengeDetailScreen(challenge)
+            val challenge = challengeViewModel.getChallengeById(id)
+
+            ChallengeDetailScreen(
+                challenge = challenge,
+                setStampChecked = stampViewModel::setStampChecked,
+            )
         }
     }
 }

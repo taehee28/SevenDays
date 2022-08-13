@@ -13,6 +13,7 @@ interface LocalDataSource {
     suspend fun removeChallenge(challengeId: Long)
     suspend fun getStamps(challengeId: Long): List<Stamp>
     suspend fun addStamps(vararg stamp: Stamp): List<Long>
+    suspend fun updateStampChecked(stamp: Stamp)
 }
 
 class LocalDataSourceImpl @Inject constructor(
@@ -28,4 +29,6 @@ class LocalDataSourceImpl @Inject constructor(
     override suspend fun getStamps(challengeId: Long) = stampDao.getStamps(challengeId)
 
     override suspend fun addStamps(vararg stamp: Stamp) = stampDao.addStamps(*stamp)
+
+    override suspend fun updateStampChecked(stamp: Stamp) = stampDao.updateStampChecked(stamp)
 }

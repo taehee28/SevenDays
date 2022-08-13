@@ -11,6 +11,8 @@ import com.thk.data.datasource.LocalDataSource
 import com.thk.data.datasource.LocalDataSourceImpl
 import com.thk.data.repository.ChallengeRepository
 import com.thk.data.repository.ChallengeRepositoryImpl
+import com.thk.data.repository.StampRepository
+import com.thk.data.repository.StampRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +27,12 @@ object RepositoryModule {
     @Provides
     fun provideChallengeRepository(dataSource: LocalDataSource): ChallengeRepository =
         ChallengeRepositoryImpl(dataSource)
+
+
+    @Singleton
+    @Provides
+    fun provideStampRepository(dataSource: LocalDataSource): StampRepository =
+        StampRepositoryImpl(dataSource)
 }
 
 
