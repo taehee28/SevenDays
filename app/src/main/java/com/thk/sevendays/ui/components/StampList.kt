@@ -2,6 +2,7 @@
 
 package com.thk.sevendays.ui.components
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
@@ -52,6 +53,7 @@ fun ChallengeStampCard(
     setStampChecked: (Stamp) -> Unit,
     header: @Composable LazyItemScope.() -> Unit = {}
 ) {
+    Log.d("TAG", "ChallengeStampCard: stamps = $stamps")
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
@@ -131,15 +133,19 @@ private fun LabeledStampBox(
 
         Spacer(modifier = Modifier.width(24.dp))
 
-        if (stamp.isChecked || stamp.date.isToday()) {
-            val (labelText, labelColor) = if (stamp.date.isToday()) {
-                "오늘!" to Blue300
-            } else {
-                stamp.date.toString() to RedA100
+        if (!stamp.date.isAfter(LocalDate.now())) {
+            val (labelText, labelColor) = stamp.run {
+                if (date.isToday()) {
+                    "오늘!" to Blue300
+                } else {
+                    val color = if (isChecked) RedA100 else Color.Gray
+                    date.toString() to color
+                }
             }
 
             Label(labelText, labelColor)
         }
+
     }
 }
 
