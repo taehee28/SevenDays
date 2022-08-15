@@ -223,6 +223,7 @@ private fun Dialog_Alert(
                     Text(text = "취소")
                 }
                 TextButton(
+                    enabled = challengeTitle.isNotBlank(),
                     onClick = {
                         onAddChallenge(challengeTitle)
                         setShowDialog(false)
