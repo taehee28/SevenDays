@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -36,12 +37,25 @@ fun SevenDaysHome(
     uiStateFlow: StateFlow<UiState<List<Challenge>>>,
     onAddChallenge: (String) -> Unit,
     onRemoveChallenge: (Long) -> Unit,
-    onChallengeClick: (Long) -> Unit
+    onChallengeClick: (Long) -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     val uiState by uiStateFlow.collectAsState()
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                actions = {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(imageVector = Icons.Rounded.Settings, contentDescription = "settings")
+                    }
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { setShowDialog(true) }
@@ -108,7 +122,8 @@ private fun SevenDaysScreenPreview_light() {
             onAddChallenge = {},
             onChallengeClick = {},
             onRemoveChallenge = {},
-            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList))
+            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList)),
+            onSettingsClick = {}
         )
     }
 }
@@ -123,7 +138,8 @@ private fun SevenDaysScreenPreview_dark() {
             onAddChallenge = {},
             onChallengeClick = {},
             onRemoveChallenge = {},
-            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList))
+            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList)),
+            onSettingsClick = {}
         )
     }
 }

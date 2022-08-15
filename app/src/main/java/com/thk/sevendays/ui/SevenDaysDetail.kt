@@ -4,12 +4,13 @@ package com.thk.sevendays.ui
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.thk.data.model.Challenge
 import com.thk.data.model.Stamp
 import com.thk.data.model.sampleChallengeList
@@ -27,14 +28,28 @@ fun ChallengeDetailScreen(
     challenge: Challenge?,
     uiStateFlow: StateFlow<UiState<List<Stamp>>>,
     setStampChecked: (Stamp) -> Unit,
-    onDisposed: () -> Unit
+    onDisposed: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     val uiState by uiStateFlow.collectAsState()
 
     // 해당 화면을 빠져나갈 때(= disposed) viewModel의 데이터 제거
     DisposableEffect(Unit) { onDispose { onDisposed() } }
 
-    Scaffold {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = onBackClick) {
+                        Icon(imageVector = Icons.Rounded.ArrowBack, contentDescription = "back")
+                    }
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                elevation = 0.dp
+            )
+        }
+    ) {
         if (challenge == null) {
             Text(text = "error!")
         } else {
@@ -67,6 +82,7 @@ fun ChallengeDetailScreenPreview() {
         ChallengeDetailScreen(
             sampleChallengeList[0],
             MutableStateFlow(UiState.Success(sampleStampList)),
+            {},
             {},
             {}
         )

@@ -2,12 +2,14 @@
 
 package com.thk.sevendays.ui
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -15,9 +17,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.thk.data.logd
 import com.thk.sevendays.SevenDaysScreen
 import com.thk.sevendays.data.ChallengeViewModel
 import com.thk.sevendays.data.StampViewModel
@@ -32,21 +37,7 @@ fun SevenDaysApp(
     val navController = rememberNavController()
 
     SevenDaysAppTheme {
-        Scaffold(
-            topBar = {
-                NavigationTopAppBar(
-                    navController = navController,
-                    title = {},
-                    navigationIcon = {
-                         IconButton(onClick = { /*TODO*/ }) {
-                             Icon(Icons.Default.Home, contentDescription = "home")
-                         }
-                    },
-                    backgroundColor = MaterialTheme.colors.background,
-                    elevation = 0.dp
-                )
-            }
-        ) {
+        Scaffold {
             SevenDaysNavHost(
                 navController = navController,
                 challengeViewModel = challengeViewModel,
@@ -56,6 +47,61 @@ fun SevenDaysApp(
     }
 }
 
+@Composable
+private fun SevenDaysNavHost(
+    navController: NavHostController,
+    challengeViewModel: ChallengeViewModel,
+    stampViewModel: StampViewModel
+) {
+    NavHost(
+        navController = navController,
+        startDestination = SevenDaysScreen.Home.name
+    ) {
+        // 메인 리스트 화면
+        composable(route = SevenDaysScreen.Home.name) {
+            SevenDaysHome(
+                uiStateFlow = challengeViewModel.uiState,
+                onAddChallenge = challengeViewModel::addChallenge,
+                onRemoveChallenge = challengeViewModel::removeChallenge,
+                onChallengeClick = { navController.navigateToDetail(it) },
+                onSettingsClick =  { navController.navigate(SevenDaysScreen.Settings.name) }
+            )
+        }
+
+        // 도전 상세 화면
+        composable(
+            route = "${SevenDaysScreen.Detail.name}/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.LongType
+                }
+            )
+        ) { entry ->
+            val id = entry.arguments?.getLong("id", -1) ?: -1
+            val challenge = challengeViewModel.getChallengeById(id)
+
+            stampViewModel.getStamps(id)
+
+            ChallengeDetailScreen(
+                challenge = challenge,
+                uiStateFlow = stampViewModel.uiState,
+                setStampChecked = stampViewModel::setStampChecked,
+                onDisposed = stampViewModel::clearUiState,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        // 설정 화면 
+        composable(route = SevenDaysScreen.Settings.name) {
+            SettingsScreen(
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+    }
+}
+
+
+@Deprecated("더이상 사용하지 않음")
 @Composable
 private fun NavigationTopAppBar(
     navController: NavHostController,
@@ -109,48 +155,4 @@ private fun NavController.rememberPreviousBackStackEntryAsState(): State<NavBack
     }
 
     return previousNavBackStackEntry
-}
-
-@Composable
-private fun SevenDaysNavHost(
-    navController: NavHostController,
-    challengeViewModel: ChallengeViewModel,
-    stampViewModel: StampViewModel
-) {
-    NavHost(
-        navController = navController,
-        startDestination = SevenDaysScreen.Home.name
-    ) {
-        // 메인 리스트 화면
-        composable(route = SevenDaysScreen.Home.name) {
-            SevenDaysHome(
-                uiStateFlow = challengeViewModel.uiState,
-                onAddChallenge = challengeViewModel::addChallenge,
-                onRemoveChallenge = challengeViewModel::removeChallenge,
-                onChallengeClick = { navController.navigateToDetail(it) }
-            )
-        }
-
-        // 도전 상세 화면
-        composable(
-            route = "${SevenDaysScreen.Detail.name}/{id}",
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.LongType
-                }
-            )
-        ) { entry ->
-            val id = entry.arguments?.getLong("id", -1) ?: -1
-            val challenge = challengeViewModel.getChallengeById(id)
-
-            stampViewModel.getStamps(id)
-
-            ChallengeDetailScreen(
-                challenge = challenge,
-                uiStateFlow = stampViewModel.uiState,
-                setStampChecked = stampViewModel::setStampChecked,
-                onDisposed = stampViewModel::clearUiState
-            )
-        }
-    }
 }
