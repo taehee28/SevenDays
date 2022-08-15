@@ -31,7 +31,7 @@ fun ChallengeList(
     onChallengeClick: (Long) -> Unit,
     onRemoveChallenge: ((Long) -> Unit)? = null
 ) {
-    LazyColumn(contentPadding = PaddingValues(16.dp), modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 72.dp), modifier = Modifier.fillMaxHeight()) {
         items(
             items = challenges,
             key = { it.challengeId }
