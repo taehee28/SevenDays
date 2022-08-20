@@ -37,15 +37,13 @@ fun SettingsScreen(
     ) {
 
         Column {
-            Section {
-                SwitchPref(text = "this is a switch", description = "description", checked = true, onCheckedChange = {})
-                SwitchPref(text = "this is a switch", description = "description", checked = false, onCheckedChange = {}, enabled = false)
+            Section(title = "알림") {
+                SwitchPref(
+                    text = "알림 받기",
+                    checked = true,
+                    onCheckedChange = {}
+                )
             }
-
-            Section(title = "title") {
-                SwitchPref(text = "this is a switch", checked = true, onCheckedChange = {})
-            }
-
         }
     }
 }
@@ -85,10 +83,10 @@ fun Section(
 @Composable
 fun SwitchPref(
     text: String,
+    description: String = "",
+    enabled: Boolean = true,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    description: String = "",
-    enabled: Boolean = true
 ) = BasePerf(
     text = text,
     description = description,
