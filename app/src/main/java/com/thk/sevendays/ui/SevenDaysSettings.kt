@@ -73,11 +73,12 @@ fun Section(
             color = MaterialTheme.colors.secondaryVariant,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 10.dp)
         )
     }
 
     content()
+    Divider(modifier = Modifier.padding(top = 8.dp))
 }
 
 @Composable
