@@ -1,6 +1,7 @@
 
 package com.thk.sevendays.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -36,7 +37,7 @@ fun SettingsScreen(
     ) {
 
         Column {
-            Section(title = "title") {
+            Section {
                 SwitchPref(text = "this is a switch", description = "description", checked = true, onCheckedChange = {})
                 SwitchPref(text = "this is a switch", description = "description", checked = false, onCheckedChange = {}, enabled = false)
             }
@@ -64,7 +65,7 @@ fun Section(
 ) = Column(
     modifier = Modifier
         .fillMaxWidth()
-        .padding(16.dp)
+        .padding(vertical = 16.dp)
 ) {
     if (title.isNotBlank()) {
         Text(
@@ -73,7 +74,7 @@ fun Section(
             color = MaterialTheme.colors.secondaryVariant,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = 10.dp, start = 16.dp)
         )
     }
 
@@ -88,12 +89,32 @@ fun SwitchPref(
     onCheckedChange: (Boolean) -> Unit,
     description: String = "",
     enabled: Boolean = true
+) = BasePerf(
+    text = text,
+    description = description,
+    enabled = enabled
+) {
+    Switch(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        enabled = enabled,
+    )
+}
+
+@Composable
+fun BasePerf(
+    text: String,
+    description: String = "",
+    enabled: Boolean = true,
+    onClick: (() -> Unit)? = null,
+    component: @Composable () -> Unit = {}
 ) = Box(
     modifier = Modifier
         .fillMaxWidth()
+        .padding(horizontal = 16.dp)
         .height(80.dp)
+        .clickable(enabled = onClick != null, onClick = onClick ?: {})
 ) {
-
     val textAlpha = if (enabled) 1f else 0.5f
 
     Column(
@@ -116,11 +137,9 @@ fun SwitchPref(
         }
     }
 
-    Switch(
-        checked = checked,
-        onCheckedChange = onCheckedChange,
-        enabled = enabled,
-        modifier = Modifier.align(Alignment.CenterEnd)
-    )
+    Box(modifier = Modifier.align(Alignment.CenterEnd)) {
+        component()
+    }
 }
+
 
