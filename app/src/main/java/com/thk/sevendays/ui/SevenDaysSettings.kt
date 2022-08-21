@@ -1,19 +1,30 @@
 
 package com.thk.sevendays.ui
 
+import android.widget.TimePicker
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.DialogProperties
+import com.google.android.material.timepicker.MaterialTimePicker
 
 @Composable
 fun SettingsScreen(
@@ -43,6 +54,8 @@ fun SettingsScreen(
                     checked = true,
                     onCheckedChange = {}
                 )
+
+                TimePickerPref(text = "알림 시간 선택")
             }
         }
     }
@@ -96,6 +109,91 @@ fun SwitchPref(
         checked = checked,
         onCheckedChange = onCheckedChange,
         enabled = enabled,
+    )
+}
+
+@Composable
+fun TimePickerPref(
+    text: String,
+    description: String = "",
+    enabled: Boolean = true
+) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    BasePerf(
+        text = text,
+        description = description,
+        enabled = enabled,
+        onClick = {
+            showDialog = true
+        }
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            // TODO: 시간 글씨 색이랑 title 글씨 색이랑 차이가 있어야 할듯
+            Text(text = "8:00", style = MaterialTheme.typography.body1)
+            Spacer(modifier = Modifier.width(8.dp))
+            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "select alert time", tint = Color.DarkGray)
+        }
+    }
+
+    if (showDialog) {
+        TimePickerDialog(
+            onDismissRequest = { showDialog = false },
+        )
+    }
+}
+
+@Composable
+private fun TimePickerDialog(
+    onDismissRequest: () -> Unit
+) {
+    var hour by remember { mutableStateOf("8") }
+    var minute by remember { mutableStateOf("00") }
+
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        text = {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedTextField(
+                    value = hour,
+                    onValueChange = { hour = it },
+                    modifier = Modifier.size(80.dp),
+                    textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                )
+
+                Text(
+                    text = ":",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    style = MaterialTheme.typography.h5,
+                    textAlign = TextAlign.Center
+                )
+
+                OutlinedTextField(
+                    value = minute,
+                    onValueChange = { minute = it },
+                    modifier = Modifier.size(80.dp),
+                    textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
+                )
+            }
+        },
+        buttons = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "취소")
+                }
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = "확인")
+                }
+            }
+        }
     )
 }
 
