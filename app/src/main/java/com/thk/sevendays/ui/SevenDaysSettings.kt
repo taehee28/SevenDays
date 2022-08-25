@@ -2,6 +2,7 @@
 package com.thk.sevendays.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -10,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
@@ -23,8 +25,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.thk.data.logd
 
 @Composable
 fun SettingsScreen(
@@ -138,6 +140,8 @@ fun TimePickerPref(
 
     if (showDialog) {
         TimePickerDialog(
+            hour = "8",
+            minute = "00",
             onDismissRequest = { showDialog = false },
         )
     }
@@ -145,45 +149,115 @@ fun TimePickerPref(
 
 @Composable
 private fun TimePickerDialog(
+    hour: String,
+    minute: String,
     onDismissRequest: () -> Unit
 ) {
-    var hour by remember { mutableStateOf("8") }
-    var minute by remember { mutableStateOf("00") }
+    var inputHour by remember { mutableStateOf(hour) }
+    var inputMinute by remember { mutableStateOf(minute) }
+    var hourMenuExpanded by remember { mutableStateOf(false) }
+    var minuteMenuExpanded by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
         text = {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
             ) {
-                VerticalToggleButtons(
-                    items = listOf("오전", "오후"),
-                    onToggleChanged = {}
-                )
-                
-                Spacer(modifier = Modifier.width(4.dp))
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    VerticalToggleButtons(
+                        items = listOf("오전", "오후"),
+                        onToggleChanged = {}
+                    )
 
-                OutlinedTextField(
-                    value = hour,
-                    onValueChange = { hour = it },
-                    modifier = Modifier.width(50.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                )
+                    Spacer(modifier = Modifier.width(8.dp))
 
-                Text(
-                    text = ":",
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    style = MaterialTheme.typography.h5,
-                    textAlign = TextAlign.Center
-                )
+                    Column {
 
-                OutlinedTextField(
-                    value = minute,
-                    onValueChange = { minute = it },
-                    modifier = Modifier.width(50.dp),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal)
-                )
+                        OutlinedTextField(
+                            value = inputHour,
+                            onValueChange = { inputHour = it },
+                            readOnly = true,
+                            modifier = Modifier
+                                .height(70.dp)
+                                .width(70.dp)
+                                .clickable { hourMenuExpanded = true },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+                            enabled = false
+                        )
+
+                        DropdownMenu(
+                            expanded = hourMenuExpanded,
+                            onDismissRequest = { hourMenuExpanded = !hourMenuExpanded },
+                            modifier = Modifier.height(200.dp)
+                        ) {
+                            for (i in 1..12) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        hourMenuExpanded = false
+                                        inputHour = i.toString()
+                                    }
+                                ) {
+                                    Text(
+                                        text = i.toString(),
+                                        textAlign = TextAlign.End,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+
+                    Text(
+                        text = ":",
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        style = MaterialTheme.typography.h5,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Column {
+                        OutlinedTextField(
+                            value = inputMinute,
+                            onValueChange = { inputMinute = it },
+                            readOnly = true,
+                            enabled = false,
+                            modifier = Modifier
+                                .height(70.dp)
+                                .width(70.dp)
+                                .clickable { minuteMenuExpanded = true },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                            textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center)
+                        )
+
+                        DropdownMenu(
+                            expanded = minuteMenuExpanded,
+                            onDismissRequest = { minuteMenuExpanded = !minuteMenuExpanded },
+                            modifier = Modifier.height(200.dp)
+                        ) {
+                            for (i in 0..55 step 5) {
+                                DropdownMenuItem(
+                                    onClick = {
+                                        minuteMenuExpanded = false
+                                        inputMinute = String.format("%02d", i)
+                                    }
+                                ) {
+                                    Text(
+                                        text = String.format("%02d", i),
+                                        textAlign = TextAlign.End,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         },
         buttons = {
@@ -191,7 +265,7 @@ private fun TimePickerDialog(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = onDismissRequest) {
                     Text(text = "취소")
                 }
                 TextButton(onClick = { /*TODO*/ }) {
@@ -206,6 +280,8 @@ private fun TimePickerDialog(
 @Composable
 private fun TimePickerDialogPreview() {
     TimePickerDialog(
+        hour = "8",
+        minute = "00",
         onDismissRequest = {}
     )
 }
