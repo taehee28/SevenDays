@@ -1,10 +1,7 @@
 
 package com.thk.sevendays.ui
 
-import android.widget.TimePicker
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -14,15 +11,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -30,9 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.compose.ui.window.DialogProperties
-import com.google.android.material.timepicker.MaterialTimePicker
+import androidx.compose.ui.zIndex
 
 @Composable
 fun SettingsScreen(
@@ -161,31 +153,16 @@ private fun TimePickerDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         text = {
-
-
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Column {
-                    OutlinedButton(
-                        onClick = { /*TODO*/ },
-                        shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-                        contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp),
-                        modifier = Modifier.defaultMinSize(minHeight = 1.dp, minWidth = 1.dp)
-                    ) {
-                        Text(text = "오전", fontSize = 10.sp)
-                    }
-
-                    OutlinedButton(
-                        onClick = { /*TODO*/ },
-                        shape = RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp),
-                        contentPadding = PaddingValues(vertical = 6.dp, horizontal = 8.dp),
-                        modifier = Modifier.defaultMinSize(minHeight = 1.dp, minWidth = 1.dp)
-                    ) {
-                        Text(text = "오후", fontSize = 10.sp)
-                    }
-                }
+                VerticalToggleButtons(
+                    items = listOf("오전", "오후"),
+                    onToggleChanged = {}
+                )
+                
+                Spacer(modifier = Modifier.width(4.dp))
 
                 OutlinedTextField(
                     value = hour,
@@ -234,13 +211,13 @@ private fun TimePickerDialogPreview() {
 }
 
 @Composable
-private fun ToggleButtons(
+private fun VerticalToggleButtons(
     items: List<String>,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    onToggleChanged: (String) -> Unit
 ) = Column {
-    var value by remember {
-        mutableStateOf("111")
-    }
+    val interactionSource = remember { MutableInteractionSource() }
+    var value by remember { mutableStateOf(items[0]) }
 
     items.forEachIndexed { index, s ->
         val shape = when(index) {
@@ -249,23 +226,20 @@ private fun ToggleButtons(
             else -> RoundedCornerShape(0.dp)
         }
 
+        // note : offset을 앞으로 조금씩 땡기느라 끝에 남는 공간이 생겨버림
         val modifier = when (index) {
             0 -> Modifier.offset(0.dp, 0.dp)
             else -> Modifier.offset(0.dp, (-1 * index).dp)
         }
-        val color = ButtonDefaults.outlinedButtonColors()
+
+        val buttonColors = if (value == s) ButtonDefaults.buttonColors() else ButtonDefaults.outlinedButtonColors()
+
         val backgroundColor by animateColorAsState(
-            targetValue = if (value == s) ButtonDefaults.buttonColors()
-                .backgroundColor(enabled = enabled).value
-            else ButtonDefaults.outlinedButtonColors()
-                .backgroundColor(enabled = enabled).value
+            targetValue = buttonColors.backgroundColor(enabled = enabled).value
         )
 
         val contentColor by animateColorAsState(
-            targetValue = if (value == s) ButtonDefaults.buttonColors()
-                .contentColor(enabled = enabled).value
-            else ButtonDefaults.outlinedButtonColors()
-                .contentColor(enabled = enabled).value
+            targetValue = buttonColors.contentColor(enabled = enabled).value
         )
 
         Surface(
@@ -273,7 +247,18 @@ private fun ToggleButtons(
             border = ButtonDefaults.outlinedBorder,
             color = backgroundColor,
             contentColor = contentColor,
-            modifier = modifier.toggleable(value = value == s, onValueChange = { value = s })
+            modifier = modifier
+                .zIndex(if (value == s) 1f else 0f)
+                .toggleable(
+                    value = value == s,
+                    onValueChange = {
+                        onToggleChanged(s)
+                        value = s
+                    },
+                    enabled = enabled,
+                    interactionSource = interactionSource,
+                    indication = null
+                )
         ) {
             Text(text = s, modifier = Modifier.padding(vertical = 6.dp, horizontal = 8.dp))
         }
@@ -282,9 +267,10 @@ private fun ToggleButtons(
 
 @Preview(showBackground = true)
 @Composable
-private fun ToggleButtonsPreview() {
-    ToggleButtons(
-        items = listOf("111", "222", "333")
+private fun VerticalToggleButtonsPreview() {
+    VerticalToggleButtons(
+        items = listOf("111", "222", "333"),
+        onToggleChanged = {},
     )
 }
 
