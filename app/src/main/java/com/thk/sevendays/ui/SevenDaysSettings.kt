@@ -1,8 +1,8 @@
 
 package com.thk.sevendays.ui
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -11,7 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.runtime.*
@@ -26,7 +25,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.thk.data.logd
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Composable
 fun SettingsScreen(
@@ -121,6 +122,7 @@ fun TimePickerPref(
     enabled: Boolean = true
 ) {
     var showDialog by remember { mutableStateOf(false) }
+    var time by remember { mutableStateOf(LocalTime.now()) }
 
     BasePerf(
         text = text,
@@ -132,7 +134,7 @@ fun TimePickerPref(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             // TODO: 시간 글씨 색이랑 title 글씨 색이랑 차이가 있어야 할듯
-            Text(text = "8:00", style = MaterialTheme.typography.body1)
+            Text(text = time.format(DateTimeFormatter.ofPattern("a h:mm")), style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.width(8.dp))
             Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "select alert time", tint = Color.DarkGray)
         }
@@ -140,23 +142,27 @@ fun TimePickerPref(
 
     if (showDialog) {
         TimePickerDialog(
-            hour = "8",
-            minute = "00",
+            time = LocalTime.now(),
             onDismissRequest = { showDialog = false },
+            onConfirmClick = { time = it }
         )
     }
 }
 
 @Composable
 private fun TimePickerDialog(
-    hour: String,
-    minute: String,
-    onDismissRequest: () -> Unit
+    time: LocalTime,
+    onDismissRequest: () -> Unit,
+    onConfirmClick: (LocalTime) -> Unit
 ) {
-    var inputHour by remember { mutableStateOf(hour) }
-    var inputMinute by remember { mutableStateOf(minute) }
+    var hour by remember { mutableStateOf(time.hour) }
+    var minute by remember { mutableStateOf(time.minute) }
     var hourMenuExpanded by remember { mutableStateOf(false) }
     var minuteMenuExpanded by remember { mutableStateOf(false) }
+    var isAfterNoon = hour >= 12
+    Log.d("TAG", "TimePickerDialog: isAfterNoon = $isAfterNoon")
+
+    val toggleItems = listOf("오전", "오후")
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -170,8 +176,12 @@ private fun TimePickerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     VerticalToggleButtons(
-                        items = listOf("오전", "오후"),
-                        onToggleChanged = {}
+                        items = toggleItems,
+                        initialValue = toggleItems[if (isAfterNoon) 1 else 0],
+                        onToggleChanged = {
+                            isAfterNoon = it == toggleItems[1]
+                            hour = if (isAfterNoon) (hour % 12) + 12 else hour % 12
+                        }
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
@@ -179,8 +189,8 @@ private fun TimePickerDialog(
                     Column {
 
                         OutlinedTextField(
-                            value = inputHour,
-                            onValueChange = { inputHour = it },
+                            value = (hour % 12).let { if (it == 0) 12 else it }.toString(),
+                            onValueChange = {},
                             readOnly = true,
                             modifier = Modifier
                                 .height(70.dp)
@@ -200,7 +210,7 @@ private fun TimePickerDialog(
                                 DropdownMenuItem(
                                     onClick = {
                                         hourMenuExpanded = false
-                                        inputHour = i.toString()
+                                        hour = if (isAfterNoon) (i % 12) + 12 else i % 12
                                     }
                                 ) {
                                     Text(
@@ -223,8 +233,8 @@ private fun TimePickerDialog(
 
                     Column {
                         OutlinedTextField(
-                            value = inputMinute,
-                            onValueChange = { inputMinute = it },
+                            value = minute.toString(),
+                            onValueChange = {},
                             readOnly = true,
                             enabled = false,
                             modifier = Modifier
@@ -244,7 +254,7 @@ private fun TimePickerDialog(
                                 DropdownMenuItem(
                                     onClick = {
                                         minuteMenuExpanded = false
-                                        inputMinute = String.format("%02d", i)
+                                        minute = i
                                     }
                                 ) {
                                     Text(
@@ -268,7 +278,10 @@ private fun TimePickerDialog(
                 TextButton(onClick = onDismissRequest) {
                     Text(text = "취소")
                 }
-                TextButton(onClick = { /*TODO*/ }) {
+                TextButton(onClick = {
+                    onConfirmClick(LocalTime.of(hour, minute))
+                    onDismissRequest()
+                }) {
                     Text(text = "확인")
                 }
             }
@@ -280,20 +293,21 @@ private fun TimePickerDialog(
 @Composable
 private fun TimePickerDialogPreview() {
     TimePickerDialog(
-        hour = "8",
-        minute = "00",
-        onDismissRequest = {}
+        time = LocalTime.of(20, 0),
+        onDismissRequest = {},
+        onConfirmClick = { time -> }
     )
 }
 
 @Composable
 private fun VerticalToggleButtons(
     items: List<String>,
+    initialValue: String,
     enabled: Boolean = true,
     onToggleChanged: (String) -> Unit
 ) = Column {
     val interactionSource = remember { MutableInteractionSource() }
-    var value by remember { mutableStateOf(items[0]) }
+    var value by remember { mutableStateOf(initialValue) }
 
     items.forEachIndexed { index, s ->
         val shape = when(index) {
@@ -347,6 +361,7 @@ private fun VerticalToggleButtonsPreview() {
     VerticalToggleButtons(
         items = listOf("111", "222", "333"),
         onToggleChanged = {},
+        initialValue = "111"
     )
 }
 
