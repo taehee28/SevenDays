@@ -155,11 +155,9 @@ private fun TimePickerDialog(
     onDismissRequest: () -> Unit,
     onConfirmClick: (LocalTime) -> Unit
 ) {
-    var hour by remember { mutableStateOf(time.hour) }
+    var hour by remember { mutableStateOf(time.format(DateTimeFormatter.ofPattern("h")).toInt()) }
     var minute by remember { mutableStateOf(time.minute) }
-    var hourMenuExpanded by remember { mutableStateOf(false) }
-    var minuteMenuExpanded by remember { mutableStateOf(false) }
-    var isAfterNoon = hour >= 12
+    var isAfterNoon = time.hour >= 12
 
     val toggleItems = listOf("오전", "오후")
 
@@ -177,51 +175,16 @@ private fun TimePickerDialog(
                     VerticalToggleButtons(
                         items = toggleItems,
                         initialValue = toggleItems[if (isAfterNoon) 1 else 0],
-                        onToggleChanged = {
-                            isAfterNoon = it == toggleItems[1]
-                            hour = if (isAfterNoon) (hour % 12) + 12 else hour % 12
-                        }
+                        onToggleChanged = { isAfterNoon = it == toggleItems[1] }
                     )
 
                     Spacer(modifier = Modifier.width(8.dp))
 
-                    Column {
-
-                        OutlinedTextField(
-                            value = (hour % 12).let { if (it == 0) 12 else it }.toString(),
-                            onValueChange = {},
-                            readOnly = true,
-                            modifier = Modifier
-                                .height(70.dp)
-                                .width(70.dp)
-                                .clickable { hourMenuExpanded = true },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
-                            enabled = false
-                        )
-
-                        DropdownMenu(
-                            expanded = hourMenuExpanded,
-                            onDismissRequest = { hourMenuExpanded = !hourMenuExpanded },
-                            modifier = Modifier.height(200.dp)
-                        ) {
-                            for (i in 1..12) {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        hourMenuExpanded = false
-                                        hour = if (isAfterNoon) (i % 12) + 12 else i % 12
-                                    }
-                                ) {
-                                    Text(
-                                        text = i.toString(),
-                                        textAlign = TextAlign.End,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                }
-                            }
-                        }
-                    }
-
+                    TimePickerTextField(
+                        value = hour.toString(),
+                        items = (1..12).map { it.toString() },
+                        onMenuItemClick = { hour = it.toInt() }
+                    )
 
                     Text(
                         text = ":",
@@ -230,42 +193,11 @@ private fun TimePickerDialog(
                         textAlign = TextAlign.Center
                     )
 
-                    Column {
-                        OutlinedTextField(
-                            value = String.format("%02d", minute),
-                            onValueChange = {},
-                            readOnly = true,
-                            enabled = false,
-                            modifier = Modifier
-                                .height(70.dp)
-                                .width(70.dp)
-                                .clickable { minuteMenuExpanded = true },
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                            textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center)
-                        )
-
-                        DropdownMenu(
-                            expanded = minuteMenuExpanded,
-                            onDismissRequest = { minuteMenuExpanded = !minuteMenuExpanded },
-                            modifier = Modifier.height(200.dp)
-                        ) {
-                            for (i in 0..55 step 5) {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        minuteMenuExpanded = false
-                                        minute = i
-                                    }
-                                ) {
-                                    Text(
-                                        text = String.format("%02d", i),
-                                        textAlign = TextAlign.End,
-                                        modifier = Modifier.fillMaxWidth()
-                                    )
-                                }
-                            }
-                        }
-                    }
-
+                    TimePickerTextField(
+                        value = String.format("%02d", minute),
+                        items = (0..11).map { String.format("%02d", (it * 5)) },
+                        onMenuItemClick = { minute = it.toInt() }
+                    )
                 }
             }
         },
@@ -278,7 +210,8 @@ private fun TimePickerDialog(
                     Text(text = "취소")
                 }
                 TextButton(onClick = {
-                    onConfirmClick(LocalTime.of(hour, minute))
+                    val _hour = if (isAfterNoon) (hour % 12) + 12 else hour % 12
+                    onConfirmClick(LocalTime.of(_hour, minute))
                     onDismissRequest()
                 }) {
                     Text(text = "확인")
@@ -296,6 +229,49 @@ private fun TimePickerDialogPreview() {
         onDismissRequest = {},
         onConfirmClick = { time -> }
     )
+}
+
+@Composable
+private fun TimePickerTextField(
+    value: String,
+    items: List<String>,
+    onMenuItemClick: (String) -> Unit,
+) = Column {
+    var menuExpanded by remember { mutableStateOf(false) }
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = {},
+        readOnly = true,
+        enabled = false,
+        modifier = Modifier
+            .height(70.dp)
+            .width(70.dp)
+            .clickable { menuExpanded = true },
+        textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center)
+    )
+
+    DropdownMenu(
+        expanded = menuExpanded,
+        onDismissRequest = { menuExpanded = !menuExpanded },
+        modifier = Modifier.height(200.dp)
+    ) {
+        items.forEach {
+            DropdownMenuItem(
+                onClick = {
+                    menuExpanded = false
+                    onMenuItemClick(it)
+                }
+            ) {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+
 }
 
 @Composable
