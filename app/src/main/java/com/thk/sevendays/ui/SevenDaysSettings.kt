@@ -142,7 +142,7 @@ fun TimePickerPref(
 
     if (showDialog) {
         TimePickerDialog(
-            time = LocalTime.now(),
+            time = time,
             onDismissRequest = { showDialog = false },
             onConfirmClick = { time = it }
         )
@@ -160,7 +160,6 @@ private fun TimePickerDialog(
     var hourMenuExpanded by remember { mutableStateOf(false) }
     var minuteMenuExpanded by remember { mutableStateOf(false) }
     var isAfterNoon = hour >= 12
-    Log.d("TAG", "TimePickerDialog: isAfterNoon = $isAfterNoon")
 
     val toggleItems = listOf("오전", "오후")
 
@@ -233,7 +232,7 @@ private fun TimePickerDialog(
 
                     Column {
                         OutlinedTextField(
-                            value = minute.toString(),
+                            value = String.format("%02d", minute),
                             onValueChange = {},
                             readOnly = true,
                             enabled = false,
