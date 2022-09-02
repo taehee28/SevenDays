@@ -83,10 +83,22 @@ fun TimePickerPref(
             showDialog = true
         }
     ) {
+        val textAlpha = if (enabled) 1f else 0.5f
+
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = time.format(DateTimeFormatter.ofPattern("a h:mm")), style = MaterialTheme.typography.body1)
+            Text(
+                text = time.format(DateTimeFormatter.ofPattern("a h:mm")),
+                style = MaterialTheme.typography.body1,
+                modifier = Modifier.alpha(textAlpha)
+            )
             Spacer(modifier = Modifier.width(8.dp))
-            Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "select alert time", tint = Color.DarkGray)
+
+            Icon(
+                imageVector = Icons.Rounded.KeyboardArrowRight,
+                contentDescription = "select alert time",
+                tint = Color.DarkGray,
+                modifier = Modifier.alpha(textAlpha)
+            )
         }
     }
 
@@ -303,7 +315,7 @@ private fun BasePerf(
         .fillMaxWidth()
         .padding(horizontal = 16.dp)
         .height(80.dp)
-        .clickable(enabled = onClick != null, onClick = onClick ?: {})
+        .clickable(enabled = (onClick != null) && enabled, onClick = onClick ?: {})
 ) {
     val textAlpha = if (enabled) 1f else 0.5f
 

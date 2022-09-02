@@ -54,14 +54,16 @@ fun SettingsScreen(
     ) {
 
         Column {
+            var alarmEnabled by remember { mutableStateOf(false) }
+
             Section(title = "알림") {
                 SwitchPref(
                     text = "알림 받기",
-                    checked = true,
-                    onCheckedChange = {}
+                    checked = alarmEnabled,
+                    onCheckedChange = { alarmEnabled = it }
                 )
 
-                TimePickerPref(text = "알림 시간 선택")
+                TimePickerPref(text = "알림 시간 선택", enabled = alarmEnabled)
             }
         }
     }
