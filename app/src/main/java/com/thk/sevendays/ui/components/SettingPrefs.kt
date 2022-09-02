@@ -84,7 +84,6 @@ fun TimePickerPref(
         }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            // TODO: 시간 글씨 색이랑 title 글씨 색이랑 차이가 있어야 할듯
             Text(text = time.format(DateTimeFormatter.ofPattern("a h:mm")), style = MaterialTheme.typography.body1)
             Spacer(modifier = Modifier.width(8.dp))
             Icon(imageVector = Icons.Rounded.KeyboardArrowRight, contentDescription = "select alert time", tint = Color.DarkGray)
@@ -199,7 +198,8 @@ private fun TimePickerTextField(
             .height(70.dp)
             .width(70.dp)
             .clickable { menuExpanded = true },
-        textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center)
+        textStyle = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+        colors = TextFieldDefaults.outlinedTextFieldColors(disabledTextColor = Color.Black)
     )
 
     DropdownMenu(
