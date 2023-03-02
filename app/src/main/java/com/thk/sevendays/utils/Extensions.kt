@@ -1,7 +1,7 @@
 package com.thk.sevendays.utils
 
 import androidx.navigation.NavController
-import com.thk.sevendays.SevenDaysScreen
+import com.thk.sevendays.navigation.SevenDaysScreen
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 

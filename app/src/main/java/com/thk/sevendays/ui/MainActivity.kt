@@ -1,14 +1,13 @@
 
-package com.thk.sevendays
+package com.thk.sevendays.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.thk.sevendays.data.ChallengeViewModel
-import com.thk.sevendays.data.StampViewModel
-import com.thk.sevendays.ui.SevenDaysApp
+import com.thk.sevendays.ui.viewmodels.ChallengeViewModel
+import com.thk.sevendays.ui.viewmodels.StampViewModel
+import com.thk.sevendays.navigation.SevenDaysApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

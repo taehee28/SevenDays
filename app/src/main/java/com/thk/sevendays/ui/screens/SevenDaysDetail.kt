@@ -1,13 +1,11 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.thk.sevendays.ui
+package com.thk.sevendays.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,13 +13,11 @@ import com.thk.data.model.Challenge
 import com.thk.data.model.Stamp
 import com.thk.data.model.sampleChallengeList
 import com.thk.data.model.sampleStampList
-import com.thk.sevendays.data.UiState
+import com.thk.sevendays.state.UiState
 import com.thk.sevendays.ui.components.ChallengeCard
 import com.thk.sevendays.ui.components.ChallengeStampCard
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.launch
 
 @Composable
 fun ChallengeDetailScreen(

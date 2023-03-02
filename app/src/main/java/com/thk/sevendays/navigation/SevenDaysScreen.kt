@@ -1,4 +1,4 @@
-package com.thk.sevendays
+package com.thk.sevendays.navigation
 
 enum class SevenDaysScreen {
     Home,

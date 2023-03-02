@@ -1,13 +1,10 @@
-package com.thk.sevendays.data
+package com.thk.sevendays.ui.viewmodels
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.thk.data.logd
 import com.thk.data.model.Stamp
 import com.thk.data.repository.StampRepository
+import com.thk.sevendays.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest

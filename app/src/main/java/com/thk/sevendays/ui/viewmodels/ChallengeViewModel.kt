@@ -1,11 +1,10 @@
-package com.thk.sevendays.data
+package com.thk.sevendays.ui.viewmodels
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thk.data.model.Challenge
-import com.thk.data.model.sampleChallengeList
 import com.thk.data.repository.ChallengeRepository
+import com.thk.sevendays.state.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

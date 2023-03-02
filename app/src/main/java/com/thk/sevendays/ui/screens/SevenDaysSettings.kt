@@ -1,5 +1,5 @@
 
-package com.thk.sevendays.ui
+package com.thk.sevendays.ui.screens
 
 import android.util.Log
 import androidx.compose.animation.animateColorAsState

@@ -1,31 +1,26 @@
 @file:OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 
-package com.thk.sevendays.ui
+package com.thk.sevendays.navigation
 
-import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import androidx.navigation.*
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.thk.data.logd
-import com.thk.sevendays.SevenDaysScreen
-import com.thk.sevendays.data.ChallengeViewModel
-import com.thk.sevendays.data.StampViewModel
+import com.thk.sevendays.ui.viewmodels.ChallengeViewModel
+import com.thk.sevendays.ui.viewmodels.StampViewModel
+import com.thk.sevendays.ui.screens.ChallengeDetailScreen
+import com.thk.sevendays.ui.screens.SettingsScreen
+import com.thk.sevendays.ui.screens.SevenDaysHome
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.utils.navigateToDetail
 

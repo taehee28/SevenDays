@@ -1,4 +1,4 @@
-package com.thk.sevendays.data
+package com.thk.sevendays.state
 
 sealed class UiState<out T> {
     object Loading: UiState<Nothing>()

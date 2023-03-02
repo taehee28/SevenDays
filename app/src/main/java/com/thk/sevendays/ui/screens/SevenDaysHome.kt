@@ -1,7 +1,6 @@
-package com.thk.sevendays.ui
+package com.thk.sevendays.ui.screens
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -23,12 +22,10 @@ import androidx.compose.ui.window.DialogProperties
 import com.thk.sevendays.ui.components.ChallengeList
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
-import com.thk.sevendays.data.UiState
-import com.thk.sevendays.ui.theme.Grey200
+import com.thk.sevendays.state.UiState
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.emptyFlow
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
