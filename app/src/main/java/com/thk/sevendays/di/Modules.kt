@@ -7,6 +7,9 @@ import com.thk.data.datasource.DataStoreSourceImpl
 import com.thk.data.datasource.LocalDataSource
 import com.thk.data.datasource.LocalDataSourceImpl
 import com.thk.data.repository.*
+import com.thk.sevendays.alarm.ReminderAlarmManager
+import com.thk.sevendays.alarm.ReminderAlarmManagerImpl
+import com.thk.sevendays.utils.alarmManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -14,6 +17,15 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
+    @Singleton
+    @Provides
+    fun provideReminderAlarmManager(@ApplicationContext appContext: Context): ReminderAlarmManager =
+        ReminderAlarmManagerImpl(appContext.alarmManager)
+}
 
 @Module
 @InstallIn(SingletonComponent::class)
