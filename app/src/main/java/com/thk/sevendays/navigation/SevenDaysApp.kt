@@ -22,12 +22,14 @@ import com.thk.sevendays.ui.screens.ChallengeDetailScreen
 import com.thk.sevendays.ui.screens.SettingsScreen
 import com.thk.sevendays.ui.screens.SevenDaysHome
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
+import com.thk.sevendays.ui.viewmodels.SettingsViewModel
 import com.thk.sevendays.utils.navigateToDetail
 
 @Composable
 fun SevenDaysApp(
     challengeViewModel: ChallengeViewModel,
     stampViewModel: StampViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
     val navController = rememberNavController()
 
@@ -36,7 +38,8 @@ fun SevenDaysApp(
             SevenDaysNavHost(
                 navController = navController,
                 challengeViewModel = challengeViewModel,
-                stampViewModel = stampViewModel
+                stampViewModel = stampViewModel,
+                settingsViewModel = settingsViewModel
             )
         }
     }
@@ -46,7 +49,8 @@ fun SevenDaysApp(
 private fun SevenDaysNavHost(
     navController: NavHostController,
     challengeViewModel: ChallengeViewModel,
-    stampViewModel: StampViewModel
+    stampViewModel: StampViewModel,
+    settingsViewModel: SettingsViewModel
 ) {
     NavHost(
         navController = navController,
@@ -89,6 +93,7 @@ private fun SevenDaysNavHost(
         // 설정 화면 
         composable(route = SevenDaysScreen.Settings.name) {
             SettingsScreen(
+                viewModel = settingsViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }

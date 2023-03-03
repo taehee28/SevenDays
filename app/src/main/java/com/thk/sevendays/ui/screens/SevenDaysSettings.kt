@@ -28,14 +28,18 @@ import androidx.compose.ui.zIndex
 import com.thk.sevendays.ui.components.Section
 import com.thk.sevendays.ui.components.SwitchPref
 import com.thk.sevendays.ui.components.TimePickerPref
+import com.thk.sevendays.ui.viewmodels.SettingsViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit
+    viewModel: SettingsViewModel,
+    onBackClick: () -> Unit,
 ) {
+    val alarmState by viewModel.alarmState.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -54,16 +58,14 @@ fun SettingsScreen(
     ) {
 
         Column {
-            var alarmEnabled by remember { mutableStateOf(false) }
-
             Section(title = "알림") {
                 SwitchPref(
                     text = "알림 받기",
-                    checked = alarmEnabled,
-                    onCheckedChange = { alarmEnabled = it }
+                    checked = alarmState,
+                    onCheckedChange = { viewModel.setAlarmState(it) }
                 )
 
-                TimePickerPref(text = "알림 시간 선택", enabled = alarmEnabled)
+                TimePickerPref(text = "알림 시간 선택", enabled = alarmState)
             }
         }
     }
@@ -72,7 +74,7 @@ fun SettingsScreen(
 @Preview
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen(
+    /*SettingsScreen(
         onBackClick = {}
-    )
+    )*/
 }
