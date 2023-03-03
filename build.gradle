@@ -6,6 +6,7 @@ buildscript {
         room_version = '2.4.3'
         hilt_version = '2.42'
         datastore_version = '1.0.0'
+        javaxInjectVersion = '1'
     }
     repositories {
         google()
