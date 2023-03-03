@@ -39,6 +39,7 @@ fun SettingsScreen(
     onBackClick: () -> Unit,
 ) {
     val alarmState by viewModel.alarmState.collectAsState()
+    val alarmTime by viewModel.alarmTime.collectAsState()
 
     Scaffold(
         topBar = {
@@ -62,10 +63,15 @@ fun SettingsScreen(
                 SwitchPref(
                     text = "알림 받기",
                     checked = alarmState,
-                    onCheckedChange = { viewModel.setAlarmState(it) }
+                    onCheckedChange = viewModel::setAlarmState
                 )
 
-                TimePickerPref(text = "알림 시간 선택", enabled = alarmState)
+                TimePickerPref(
+                    text = "알림 시간 선택",
+                    enabled = alarmState,
+                    time = alarmTime,
+                    onTimeSelected = viewModel::setAlarmTime
+                )
             }
         }
     }

@@ -70,10 +70,11 @@ fun SwitchPref(
 fun TimePickerPref(
     text: String,
     description: String = "",
-    enabled: Boolean = true
+    time: LocalTime,
+    onTimeSelected: (LocalTime) -> Unit,
+    enabled: Boolean = true,
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    var time by remember { mutableStateOf(LocalTime.now()) }
 
     BasePerf(
         text = text,
@@ -106,7 +107,7 @@ fun TimePickerPref(
         TimePickerDialog(
             time = time,
             onDismissRequest = { showDialog = false },
-            onConfirmClick = { time = it }
+            onConfirmClick = onTimeSelected
         )
     }
 }
@@ -121,8 +122,9 @@ private fun TimePickerDialog(
     var minute by remember { mutableStateOf(time.minute) }
     var isAfterNoon = time.hour >= 12
 
-    val toggleItems = listOf("오전", "오후")
+    val toggleItems = listOf("AM", "PM")
 
+    // TODO: 큰 화면에서는 어떻게 나오는지?
     AlertDialog(
         onDismissRequest = onDismissRequest,
         text = {
@@ -313,9 +315,9 @@ private fun BasePerf(
 ) = Box(
     modifier = Modifier
         .fillMaxWidth()
+        .clickable(enabled = (onClick != null) && enabled, onClick = onClick ?: {})
         .padding(horizontal = 16.dp)
         .height(80.dp)
-        .clickable(enabled = (onClick != null) && enabled, onClick = onClick ?: {})
 ) {
     val textAlpha = if (enabled) 1f else 0.5f
 
