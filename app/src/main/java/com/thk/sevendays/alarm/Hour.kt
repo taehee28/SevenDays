@@ -1,10 +1,13 @@
 package com.thk.sevendays.alarm
 
+import androidx.annotation.IntRange
+
 @JvmInline
-value class Hour(
-    val hour: Int
-) {
+value class Hour private constructor(val hour: Int) {
     companion object {
-        fun of(hour: Int) = Hour(hour)
+        fun valueOf(
+            @IntRange(from = 1, to = 12)
+            hour: Int
+        ) = Hour(hour)
     }
 }

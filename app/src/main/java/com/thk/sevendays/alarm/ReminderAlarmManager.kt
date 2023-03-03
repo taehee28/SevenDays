@@ -1,6 +1,6 @@
 package com.thk.sevendays.alarm
 
 interface ReminderAlarmManager {
-    fun registerAlarm()
+    fun registerAlarm(hour: Hour)
     fun cancelAlarm()
 }
