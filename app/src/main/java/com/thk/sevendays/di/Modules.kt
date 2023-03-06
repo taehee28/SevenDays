@@ -24,7 +24,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideReminderAlarmManager(@ApplicationContext appContext: Context): ReminderAlarmManager =
-        ReminderAlarmManagerImpl(appContext.alarmManager)
+        ReminderAlarmManagerImpl(appContext.alarmManager, appContext)
 }
 
 @Module
