@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">SevenDays</string>
+
+    <string name="channel_name">sevendays</string>
+    <string name="channel_description">reminder notification channel</string>
+
+    <string name="notification_content_title">진행 중인 도전을 확인할 시간이에요!</string>
+    <string name="notification_content_text">눌러서 확인하러 가기</string>
 </resources>

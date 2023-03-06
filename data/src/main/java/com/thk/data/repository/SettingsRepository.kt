@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 interface SettingsRepository {
     fun isAlarmOn(): Flow<Boolean>
-    suspend fun saveAlarmState(isOn: Boolean)
+    suspend fun saveAlarmState(isOn: Boolean): Result<Unit>
     fun getAlarmTime(): Flow<LocalTime>
-    suspend fun saveAlarmTime(time: LocalTime)
+    suspend fun saveAlarmTime(time: LocalTime): Result<Unit>
 }
 
 class SettingsRepositoryImpl @Inject constructor(
@@ -23,7 +23,7 @@ class SettingsRepositoryImpl @Inject constructor(
             exception.printStackTrace()
         }
 
-    override suspend fun saveAlarmState(isOn: Boolean) {
+    override suspend fun saveAlarmState(isOn: Boolean): Result<Unit> = kotlin.runCatching {
         dataStoreSource.saveAlarmState(isOn)
     }
 
@@ -35,7 +35,7 @@ class SettingsRepositoryImpl @Inject constructor(
             LocalTime.parse(it)
         }
 
-    override suspend fun saveAlarmTime(time: LocalTime) {
+    override suspend fun saveAlarmTime(time: LocalTime): Result<Unit> = kotlin.runCatching {
         dataStoreSource.saveAlarmTime(time.toString())
     }
 }

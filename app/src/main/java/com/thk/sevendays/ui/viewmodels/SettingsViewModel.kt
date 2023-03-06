@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    /*private val alarmManager: ReminderAlarmManager,*/
+    private val alarmManager: ReminderAlarmManager,
     private val repository: SettingsRepository
 ) : ViewModel() {
     val alarmState = repository.isAlarmOn()
@@ -31,10 +31,22 @@ class SettingsViewModel @Inject constructor(
         )
 
     fun setAlarmState(isOn: Boolean) = viewModelScope.launch {
-        repository.saveAlarmState(isOn)
+        repository
+            .saveAlarmState(isOn)
+            .onSuccess {
+                if (isOn) {
+                    alarmManager.registerAlarm(alarmTime.value)
+                } else {
+                    alarmManager.cancelAlarm()
+                }
+            }
     }
 
     fun setAlarmTime(time: LocalTime) = viewModelScope.launch {
-        repository.saveAlarmTime(time)
+        repository
+            .saveAlarmTime(time)
+            .onSuccess {
+                alarmManager.registerAlarm(time)
+            }
     }
 }

@@ -4,11 +4,13 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.thk.data.logd
+import java.time.LocalTime
 import java.util.Calendar
 import javax.inject.Inject
 
 interface ReminderAlarmManager {
-    fun registerAlarm(hour: Hour)
+    fun registerAlarm(time: LocalTime)
     fun cancelAlarm()
 }
 
@@ -16,17 +18,19 @@ class ReminderAlarmManagerImpl @Inject constructor(
     private val alarmManager: AlarmManager,
     private val context: Context
 ) : ReminderAlarmManager {
-    private companion object {
+    companion object {
         const val ALARM_REQUEST_CODE = 0
     }
 
-    override fun registerAlarm(hour: Hour) {
+    override fun registerAlarm(time: LocalTime) {
+        logd(">> registerAlarm: time = $time")
+
         val pendingIntent = createAlarmIntent()
 
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, hour.toInt())
-            clear(Calendar.MINUTE)
+            set(Calendar.HOUR_OF_DAY, time.hour)
+            set(Calendar.MINUTE, time.minute)
             clear(Calendar.SECOND)
         }
 
@@ -39,9 +43,9 @@ class ReminderAlarmManagerImpl @Inject constructor(
     }
 
     override fun cancelAlarm() {
-        val pendingIntent = createAlarmIntent()
+        logd(">> cancelAlarm")
 
-        alarmManager.cancel(pendingIntent)
+        createAlarmIntent().also { alarmManager.cancel(it) }
     }
 
     private fun createAlarmIntent(): PendingIntent =
