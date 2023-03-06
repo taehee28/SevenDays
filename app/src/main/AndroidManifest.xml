@@ -3,6 +3,7 @@
     package="com.thk.sevendays">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:name=".di.SevenDaysApplication"
@@ -28,6 +29,15 @@
         <receiver
             android:name=".alarm.ReminderAlarmReceiver"
             android:enabled="true"/>
+        
+        <receiver
+            android:name=".alarm.BootReceiver"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
