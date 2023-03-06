@@ -57,7 +57,10 @@ private fun SevenDaysNavHost(
         startDestination = SevenDaysScreen.Home.name
     ) {
         // 메인 리스트 화면
-        composable(route = SevenDaysScreen.Home.name) {
+        composable(
+            route = SevenDaysScreen.Home.name,
+            deepLinks = listOf(navDeepLink { uriPattern = "svd://sevendays/${SevenDaysScreen.Home.name}" })
+        ) {
             SevenDaysHome(
                 uiStateFlow = challengeViewModel.uiState,
                 onAddChallenge = challengeViewModel::addChallenge,

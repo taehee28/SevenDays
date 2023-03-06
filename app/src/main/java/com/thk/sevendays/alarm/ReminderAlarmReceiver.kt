@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import com.thk.data.logd
 import com.thk.sevendays.R
 import com.thk.sevendays.ui.MainActivity
@@ -41,19 +43,24 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
     }
 
     private fun deliverNotification(context: Context) {
-        val contentIntent = Intent(context, MainActivity::class.java)
-        val contentPendingIntent = PendingIntent.getActivity(
+        // 특정한 composable 화면을 열 수 있도록 deepLink 사용
+        val deepLinkIntent = Intent(
+            Intent.ACTION_VIEW,
+            "svd://sevendays/Home".toUri(),
             context,
-            NOTIFICATION_ID,
-            contentIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            MainActivity::class.java
         )
+
+        val deepLinkPendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(deepLinkIntent)
+            getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_round_sentiment_satisfied_24)
             .setContentTitle(context.getString(R.string.notification_content_title))
             .setContentText(context.getString(R.string.notification_content_text))
-            .setContentIntent(contentPendingIntent)
+            .setContentIntent(deepLinkPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setAutoCancel(true)
