@@ -19,11 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.thk.sevendays.ui.components.ChallengeList
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
 import com.thk.sevendays.state.UiState
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
+import com.thk.sevendays.ui.viewmodels.ChallengeViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -31,13 +33,11 @@ import kotlinx.coroutines.flow.StateFlow
 @ExperimentalComposeUiApi
 @Composable
 fun SevenDaysHome(
-    uiStateFlow: StateFlow<UiState<List<Challenge>>>,
-    onAddChallenge: (String) -> Unit,
-    onRemoveChallenge: (Long) -> Unit,
     onChallengeClick: (Long) -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    viewModel: ChallengeViewModel = hiltViewModel()
 ) {
-    val uiState by uiStateFlow.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -92,7 +92,7 @@ fun SevenDaysHome(
                 ChallengeList(
                     challenges = state.data,
                     onChallengeClick = onChallengeClick,
-                    onRemoveChallenge = onRemoveChallenge
+                    onRemoveChallenge = viewModel::removeChallenge
                 )
             }
             is UiState.Error -> {
@@ -103,7 +103,7 @@ fun SevenDaysHome(
         AnimatedVisibility(visible = showDialog) {
             AddChallengeDialog(
                 setShowDialog = setShowDialog,
-                onAddChallenge = onAddChallenge
+                onAddChallenge = viewModel::addChallenge
             )
         }
     }
@@ -116,10 +116,7 @@ fun SevenDaysHome(
 private fun SevenDaysScreenPreview_light() {
     SevenDaysAppTheme(darkTheme = false) {
         SevenDaysHome(
-            onAddChallenge = {},
             onChallengeClick = {},
-            onRemoveChallenge = {},
-            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList)),
             onSettingsClick = {}
         )
     }
@@ -132,10 +129,7 @@ private fun SevenDaysScreenPreview_light() {
 private fun SevenDaysScreenPreview_dark() {
     SevenDaysAppTheme(darkTheme = true) {
         SevenDaysHome(
-            onAddChallenge = {},
             onChallengeClick = {},
-            onRemoveChallenge = {},
-            uiStateFlow = MutableStateFlow(UiState.Success(sampleChallengeList)),
             onSettingsClick = {}
         )
     }

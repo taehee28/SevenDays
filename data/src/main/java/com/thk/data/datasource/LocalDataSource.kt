@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 interface LocalDataSource {
     fun getChallenges(): Flow<List<Challenge>>
+    suspend fun getChallenge(challengeId: Long): Challenge
     suspend fun addChallenge(challenge: Challenge): Long
     suspend fun removeChallenge(challengeId: Long)
     fun getStamps(challengeId: Long): Flow<List<Stamp>>
@@ -21,6 +22,8 @@ class LocalDataSourceImpl @Inject constructor(
     private val stampDao: StampDao
 ) : LocalDataSource {
     override fun getChallenges() = challengeDao.getChallenges()
+
+    override suspend fun getChallenge(challengeId: Long): Challenge = challengeDao.getChallenge(challengeId)
 
     override suspend fun addChallenge(challenge: Challenge) = challengeDao.addChallenge(challenge)
 

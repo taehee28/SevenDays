@@ -26,20 +26,13 @@ import com.thk.sevendays.ui.viewmodels.SettingsViewModel
 import com.thk.sevendays.utils.navigateToDetail
 
 @Composable
-fun SevenDaysApp(
-    challengeViewModel: ChallengeViewModel,
-    stampViewModel: StampViewModel,
-    settingsViewModel: SettingsViewModel
-) {
+fun SevenDaysApp() {
     val navController = rememberNavController()
 
     SevenDaysAppTheme {
         Scaffold {
             SevenDaysNavHost(
                 navController = navController,
-                challengeViewModel = challengeViewModel,
-                stampViewModel = stampViewModel,
-                settingsViewModel = settingsViewModel
             )
         }
     }
@@ -48,9 +41,6 @@ fun SevenDaysApp(
 @Composable
 private fun SevenDaysNavHost(
     navController: NavHostController,
-    challengeViewModel: ChallengeViewModel,
-    stampViewModel: StampViewModel,
-    settingsViewModel: SettingsViewModel
 ) {
     NavHost(
         navController = navController,
@@ -62,9 +52,6 @@ private fun SevenDaysNavHost(
             deepLinks = listOf(navDeepLink { uriPattern = "svd://sevendays/${SevenDaysScreen.Home.name}" })
         ) {
             SevenDaysHome(
-                uiStateFlow = challengeViewModel.uiState,
-                onAddChallenge = challengeViewModel::addChallenge,
-                onRemoveChallenge = challengeViewModel::removeChallenge,
                 onChallengeClick = { navController.navigateToDetail(it) },
                 onSettingsClick =  { navController.navigate(SevenDaysScreen.Settings.name) }
             )
@@ -80,15 +67,9 @@ private fun SevenDaysNavHost(
             )
         ) { entry ->
             val id = entry.arguments?.getLong("id", -1) ?: -1
-            val challenge = challengeViewModel.getChallengeById(id)
-
-            stampViewModel.getStamps(id)
 
             ChallengeDetailScreen(
-                challenge = challenge,
-                uiStateFlow = stampViewModel.uiState,
-                setStampChecked = stampViewModel::setStampChecked,
-                onDisposed = stampViewModel::clearUiState,
+                id = id,
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -96,8 +77,7 @@ private fun SevenDaysNavHost(
         // 설정 화면 
         composable(route = SevenDaysScreen.Settings.name) {
             SettingsScreen(
-                viewModel = settingsViewModel,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
             )
         }
     }

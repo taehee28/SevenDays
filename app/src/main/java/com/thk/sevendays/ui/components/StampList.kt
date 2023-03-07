@@ -53,7 +53,6 @@ fun ChallengeStampCard(
     setStampChecked: (Stamp) -> Unit,
     header: @Composable LazyItemScope.() -> Unit = {}
 ) {
-    Log.d("TAG", "ChallengeStampCard: stamps = $stamps")
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()

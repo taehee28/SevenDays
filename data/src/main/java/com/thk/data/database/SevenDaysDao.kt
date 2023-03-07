@@ -12,6 +12,9 @@ interface ChallengeDao {
     @Query("SELECT * FROM ${DatabaseInfo.TABLE_NAME_CHALLENGE} ORDER BY ${DatabaseInfo.COLUMN_NAME_CHALLENGE_ID} DESC")
     fun getChallenges(): Flow<List<Challenge>>
 
+    @Query("SELECT * FROM ${DatabaseInfo.TABLE_NAME_CHALLENGE} WHERE ${DatabaseInfo.COLUMN_NAME_CHALLENGE_ID} = :challengeId")
+    suspend fun getChallenge(challengeId: Long): Challenge
+
     @Insert
     suspend fun addChallenge(challenge: Challenge): Long
 

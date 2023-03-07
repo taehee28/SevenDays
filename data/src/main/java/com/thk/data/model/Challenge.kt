@@ -14,7 +14,7 @@ data class Challenge(
     val challengeId : Long = 0,
 
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_TITLE)
-    val title: String,
+    val title: String = "",
 
     @ColumnInfo(name = DatabaseInfo.COLUMN_NAME_START_DATE)
     val startDate: LocalDate = LocalDate.now()

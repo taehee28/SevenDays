@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.thk.sevendays.ui.components.Section
 import com.thk.sevendays.ui.components.SwitchPref
 import com.thk.sevendays.ui.components.TimePickerPref
@@ -35,8 +36,8 @@ import java.util.*
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel,
     onBackClick: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val alarmState by viewModel.alarmState.collectAsState()
     val alarmTime by viewModel.alarmTime.collectAsState()
