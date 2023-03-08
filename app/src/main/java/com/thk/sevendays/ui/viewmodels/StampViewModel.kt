@@ -22,9 +22,6 @@ import javax.inject.Inject
 class StampViewModel @Inject constructor(
     private val repository: StampRepository
 ) : ViewModel() {
-
-    val uiState = MutableStateFlow<UiState<List<Stamp>>>(UiState.Loading)
-
     private val _challenge = mutableStateOf<Challenge?>(null)
     val challenge: State<Challenge?>
         get() = _challenge
@@ -52,9 +49,5 @@ class StampViewModel @Inject constructor(
 
     fun setStampChecked(stamp: Stamp) = viewModelScope.launch {
         repository.setStampChecked(stamp)
-    }
-
-    fun clearUiState() {
-        uiState.value = UiState.Loading
     }
 }

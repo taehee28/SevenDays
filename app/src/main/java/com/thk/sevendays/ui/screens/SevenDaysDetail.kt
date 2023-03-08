@@ -34,12 +34,8 @@ fun ChallengeDetailScreen(
     val stamps: List<Stamp> by viewModel.stamps.collectAsState()
 
     LaunchedEffect(Unit) {
-        // TODO: 화면이 돌아가도 한번만 호출 되도록
         viewModel.loadChallengeData(id)
     }
-
-    // 해당 화면을 빠져나갈 때(= disposed) viewModel의 데이터 제거
-    DisposableEffect(Unit) { onDispose { viewModel.clearUiState() } }
 
     Scaffold(
         topBar = {
