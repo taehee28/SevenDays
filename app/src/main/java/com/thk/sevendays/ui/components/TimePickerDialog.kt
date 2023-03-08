@@ -11,10 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.thk.sevendays.R
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -28,7 +30,7 @@ fun TimePickerDialog(
     var minute by remember { mutableStateOf(time.minute) }
     var isAfterNoon = time.hour >= 12
 
-    val toggleItems = listOf("AM", "PM")
+    val toggleItems = listOf(stringResource(id = R.string.am), stringResource(id = R.string.pm))
 
     // TODO: 큰 화면에서는 어떻게 나오는지?
     AlertDialog(
@@ -77,14 +79,14 @@ fun TimePickerDialog(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(onClick = onDismissRequest) {
-                    Text(text = "취소")
+                    Text(text = stringResource(id = R.string.cancel))
                 }
                 TextButton(onClick = {
                     val _hour = if (isAfterNoon) (hour % 12) + 12 else hour % 12
                     onConfirmClick(LocalTime.of(_hour, minute))
                     onDismissRequest()
                 }) {
-                    Text(text = "확인")
+                    Text(text = stringResource(id = R.string.ok))
                 }
             }
         }

@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.thk.sevendays.ui.components.ChallengeList
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
+import com.thk.sevendays.R
 import com.thk.sevendays.state.UiState
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.ui.viewmodels.ChallengeViewModel
@@ -81,7 +83,7 @@ fun SevenDaysHome(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "진행 중인 도전이 없습니다!\n새로운 도전을 추가해주세요.",
+                            text = stringResource(id = R.string.empty_challenge_list),
                             textAlign = TextAlign.Center,
                             style = MaterialTheme.typography.body2,
                             color = Color.Gray,
@@ -160,7 +162,7 @@ private fun Dialog_FullScreen(setShowDialog: (Boolean) -> Unit) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "새 도전 추가하기") },
+                    title = { Text(text = stringResource(id = R.string.add_challenge)) },
                     navigationIcon = {
                         IconButton(onClick = { setShowDialog(false) }) {
                             Icon(imageVector = Icons.Default.Close,
@@ -192,7 +194,7 @@ private fun Dialog_Alert(
         text = {
             Column {
                 Text(
-                    text = "새 도전 추가하기",
+                    text = stringResource(id = R.string.add_challenge),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.subtitle1
@@ -211,7 +213,7 @@ private fun Dialog_Alert(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 TextButton(onClick = { setShowDialog(false) }) {
-                    Text(text = "취소")
+                    Text(text = stringResource(id = R.string.cancel))
                 }
                 TextButton(
                     enabled = challengeTitle.isNotBlank(),
@@ -220,7 +222,7 @@ private fun Dialog_Alert(
                         setShowDialog(false)
                     }
                 ) {
-                    Text(text = "추가")
+                    Text(text = stringResource(id = R.string.add))
                 }
             }
         },
@@ -233,7 +235,7 @@ private fun AddChallengeDialogContent(challengeTitle: String, onTitleChange: (St
     OutlinedTextField(
         value = challengeTitle,
         onValueChange = onTitleChange,
-        placeholder = { Text(text = "제목") },
+        placeholder = { Text(text = stringResource(id = R.string.title_placeholder)) },
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
     )

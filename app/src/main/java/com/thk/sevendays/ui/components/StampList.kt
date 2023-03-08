@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -235,7 +236,7 @@ private fun StampBox(
                         onCheckedChanged(checkedState.value)
                     } else {
                         Toast
-                            .makeText(context, "오늘 날짜만 수정할 수 있습니다!", Toast.LENGTH_SHORT)
+                            .makeText(context, context.getString(R.string.toast_modify_disabled), Toast.LENGTH_SHORT)
                             .show()
                     }
                 }

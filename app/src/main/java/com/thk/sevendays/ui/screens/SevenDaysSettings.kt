@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.thk.sevendays.R
 import com.thk.sevendays.ui.components.Section
 import com.thk.sevendays.ui.components.SwitchPref
 import com.thk.sevendays.ui.components.TimePickerPref
@@ -46,7 +48,7 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "설정")
+                    Text(text = stringResource(id = R.string.settings))
                 },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
@@ -60,16 +62,16 @@ fun SettingsScreen(
     ) {
 
         Column {
-            Section(title = "알림") {
+            Section(title = stringResource(id = R.string.settings_section_alarm)) {
                 SwitchPref(
-                    text = "알림 받기",
-                    description = "스탬프 찍는 것을 잊지 않도록 정해진 시간에 알림을 보냅니다.",
+                    text = stringResource(id = R.string.settings_get_alarm),
+                    description = stringResource(id = R.string.settings_get_alarm_description),
                     checked = alarmState,
                     onCheckedChange = viewModel::setAlarmState
                 )
 
                 TimePickerPref(
-                    text = "알림 시간 선택",
+                    text = stringResource(id = R.string.settings_section_alarm),
                     enabled = alarmState,
                     time = alarmTime,
                     onTimeSelected = viewModel::setAlarmTime

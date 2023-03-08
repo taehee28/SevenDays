@@ -16,11 +16,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
+import com.thk.sevendays.R
 import com.thk.sevendays.ui.theme.*
 import com.thk.sevendays.utils.challengingDaysFrom
 import java.time.LocalDate
@@ -99,7 +101,7 @@ fun ChallengeCard(
                             onRemoveChallenge(challenge.challengeId)
                         }
                     ) {
-                        Text(text = "삭제하기")
+                        Text(text = stringResource(id = R.string.delete))
                     }
                 }
             } }
@@ -120,7 +122,7 @@ private fun CardContent(
     ) {
         Column {
             Text(
-                text = "7일 동안",
+                text = stringResource(id = R.string.challenge_prefix),
                 style = MaterialTheme.typography.overline,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
@@ -136,12 +138,12 @@ private fun CardContent(
 
             if (challengingDays > 7) {
                 Text(
-                    text = "도전 종료",
+                    text = stringResource(id = R.string.challenge_state_ended),
                     style = MaterialTheme.typography.caption.copy(color = SevenDaysTheme.colors.finishedFontColor),
                 )
             } else {
                 Text(
-                    text = "${challengingDays}일째 도전 중!",
+                    text = stringResource(id = R.string.challenge_state_ongoing).format(challengingDays),
                     style = MaterialTheme.typography.caption.copy(color = SevenDaysTheme.colors.inChallengeFontColor),
                 )
             }
