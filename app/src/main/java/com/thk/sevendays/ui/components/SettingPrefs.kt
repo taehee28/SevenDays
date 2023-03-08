@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -56,6 +57,17 @@ fun SwitchPref(
         checked = checked,
         onCheckedChange = onCheckedChange,
         enabled = enabled,
+    )
+}
+
+@Composable
+@Preview
+fun SwitchPrefPreview() {
+    SwitchPref(
+        text = "알림 받기",
+        description = "알림을 설정합니다.",
+        checked = true,
+        onCheckedChange = {}
     )
 }
 
@@ -105,7 +117,15 @@ fun TimePickerPref(
     }
 }
 
-
+@Composable
+@Preview
+fun TimePickerPreview() {
+    TimePickerPref(
+        text = "알림 시간 선택",
+        time = LocalTime.now(),
+        onTimeSelected = {}
+    )
+}
 
 @Composable
 private fun BasePerf(
@@ -123,27 +143,34 @@ private fun BasePerf(
 ) {
     val textAlpha = if (enabled) 1f else 0.5f
 
-    Column(
-        modifier = Modifier.align(Alignment.CenterStart)
+    Row(
+        modifier = Modifier
+            .matchParentSize()
     ) {
         Text(
             text = text,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.alpha(textAlpha)
+            modifier = Modifier
+                .alpha(textAlpha)
+                .align(Alignment.CenterVertically)
+                .weight(1f)
         )
-        if (description.isNotBlank()) {
-            Text(
-                text = description,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Light),
-                modifier = Modifier.alpha(textAlpha)
-            )
+        Box(modifier = Modifier.align(Alignment.CenterVertically)) {
+            component()
         }
     }
 
-    Box(modifier = Modifier.align(Alignment.CenterEnd)) {
-        component()
+    if (description.isNotBlank()) {
+        Text(
+            text = description,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Light),
+            modifier = Modifier
+                .alpha(textAlpha)
+                .align(Alignment.BottomStart)
+        )
     }
+
 }

@@ -63,6 +63,7 @@ fun SettingsScreen(
             Section(title = "알림") {
                 SwitchPref(
                     text = "알림 받기",
+                    description = "스탬프 찍는 것을 잊지 않도록 정해진 시간에 알림을 보냅니다.",
                     checked = alarmState,
                     onCheckedChange = viewModel::setAlarmState
                 )
