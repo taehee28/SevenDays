@@ -24,6 +24,7 @@ import com.thk.sevendays.ui.screens.SevenDaysHome
 import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.ui.viewmodels.SettingsViewModel
 import com.thk.sevendays.utils.navigateToDetail
+import com.thk.sevendays.utils.navigateToSettings
 
 @Composable
 fun SevenDaysApp() {
@@ -53,7 +54,7 @@ private fun SevenDaysNavHost(
         ) {
             SevenDaysHome(
                 onChallengeClick = { navController.navigateToDetail(it) },
-                onSettingsClick =  { navController.navigate(SevenDaysScreen.Settings.name) }
+                onSettingsClick =  { navController.navigateToSettings() }
             )
         }
 

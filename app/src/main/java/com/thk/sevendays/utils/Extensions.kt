@@ -16,9 +16,9 @@ fun LocalDate.challengingDaysFrom(startDate: LocalDate): Int {
     return ChronoUnit.DAYS.between(startDate, this).toInt() + 1
 }
 
-fun NavController.navigateToDetail(id: Long) {
-    navigate("${SevenDaysScreen.Detail.name}/$id")
-}
+fun NavController.navigateToDetail(id: Long) = navigate("${SevenDaysScreen.Detail.name}/$id")
+
+fun NavController.navigateToSettings() = navigate(SevenDaysScreen.Settings.name)
 
 val Context.alarmManager
     get(): AlarmManager {
