@@ -15,6 +15,7 @@
     <string name="challenge_prefix">For 7 days,</string>
     <string name="challenge_state_ongoing">Day %d of the challenge!</string>
     <string name="challenge_state_ended">Challenge ended.</string>
+    <string name="today">Today!</string>
 
     <string name="toast_modify_disabled">You can only modify today\'s date!</string>
 

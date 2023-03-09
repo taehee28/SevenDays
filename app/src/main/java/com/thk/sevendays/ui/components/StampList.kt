@@ -136,7 +136,7 @@ private fun LabeledStampBox(
         if (!stamp.date.isAfter(LocalDate.now())) {
             val (labelText, labelColor) = stamp.run {
                 if (date.isToday()) {
-                    "오늘!" to Blue300
+                    stringResource(id = R.string.today) to Blue300
                 } else {
                     val color = if (isChecked) RedA100 else Color.Gray
                     date.toString() to color
@@ -236,7 +236,11 @@ private fun StampBox(
                         onCheckedChanged(checkedState.value)
                     } else {
                         Toast
-                            .makeText(context, context.getString(R.string.toast_modify_disabled), Toast.LENGTH_SHORT)
+                            .makeText(
+                                context,
+                                context.getString(R.string.toast_modify_disabled),
+                                Toast.LENGTH_SHORT
+                            )
                             .show()
                     }
                 }
