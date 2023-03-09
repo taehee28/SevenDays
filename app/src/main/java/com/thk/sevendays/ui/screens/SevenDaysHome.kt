@@ -39,7 +39,7 @@ fun SevenDaysHome(
     onSettingsClick: () -> Unit,
     viewModel: ChallengeViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val challenges by viewModel.challenges.collectAsState()
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -63,43 +63,37 @@ fun SevenDaysHome(
             }
         }
     ) {
-        when (val state = uiState) {
-            is UiState.Loading -> {
+        if (challenges == null) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            AnimatedVisibility(
+                visible = challenges?.isEmpty() ?: true,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator()
+                    Text(
+                        text = stringResource(id = R.string.empty_challenge_list),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.body2,
+                        color = Color.Gray,
+                    )
                 }
             }
-            is UiState.Success -> {
-                AnimatedVisibility(
-                    visible = state.data.isEmpty(),
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Box(
-                        Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.empty_challenge_list),
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.body2,
-                            color = Color.Gray,
-                        )
-                    }
-                }
 
-                ChallengeList(
-                    challenges = state.data,
-                    onChallengeClick = onChallengeClick,
-                    onRemoveChallenge = viewModel::removeChallenge
-                )
-            }
-            is UiState.Error -> {
-
-            }
+            ChallengeList(
+                challenges = challenges ?: emptyList(),
+                onChallengeClick = onChallengeClick,
+                onRemoveChallenge = viewModel::removeChallenge
+            )
         }
 
         AnimatedVisibility(visible = showDialog) {

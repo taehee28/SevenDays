@@ -1,7 +1,12 @@
 package com.thk.sevendays.ui.viewmodels
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.thk.data.logd
 import com.thk.data.model.Challenge
 import com.thk.data.repository.ChallengeRepository
 import com.thk.sevendays.state.UiState
@@ -14,22 +19,16 @@ import javax.inject.Inject
 class ChallengeViewModel @Inject constructor(
     private val challengeRepository: ChallengeRepository
 ) : ViewModel() {
-    val challenges = challengeRepository.getChallenges().stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = null
-    )
 
-    // TODO: 더 나은 구조가 있는지 알아보기
-    val uiState = MutableStateFlow<UiState<List<Challenge>>>(UiState.Loading)
-
-    init {
-        viewModelScope.launch {
-            challenges.collectLatest {
-                uiState.value = if (it != null) UiState.Success(it) else UiState.Loading
-            }
-        }
-    }
+    val challenges = challengeRepository
+        .getChallenges()
+        .distinctUntilChanged()
+        .catch { it.printStackTrace() }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
     fun addChallenge(title: String) = viewModelScope.launch {
         challengeRepository.addChallenge(title)
@@ -38,6 +37,4 @@ class ChallengeViewModel @Inject constructor(
     fun removeChallenge(id: Long) = viewModelScope.launch {
         challengeRepository.removeChallenge(id)
     }
-
-    fun getChallengeById(id: Long) = challenges.value?.firstOrNull { it.challengeId == id }
 }
