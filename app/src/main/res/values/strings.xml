@@ -8,7 +8,7 @@
     <string name="add_challenge">새 도전 추가하기</string>
     <string name="add">추가</string>
     <string name="cancel">취소</string>
-    <string name="ok">확인</string>
+    <string name="set">설정</string>
     <string name="title_placeholder">제목</string>
     <string name="delete">삭제하기</string>
 
@@ -26,6 +26,5 @@
     <string name="am">오전</string>
     <string name="pm">오후</string>
 
-    <string name="notification_content_title">진행 중인 도전을 확인할 시간이에요!</string>
-    <string name="notification_content_text">눌러서 확인하러 가기</string>
+    <string name="notification_content_title">진행 중인 도전에 스탬프를 찍어주세요!</string>
 </resources>

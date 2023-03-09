@@ -59,7 +59,6 @@ class ReminderAlarmReceiver : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_round_sentiment_satisfied_24)
             .setContentTitle(context.getString(R.string.notification_content_title))
-            .setContentText(context.getString(R.string.notification_content_text))
             .setContentIntent(deepLinkPendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)

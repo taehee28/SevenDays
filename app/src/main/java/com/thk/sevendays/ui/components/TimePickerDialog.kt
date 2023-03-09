@@ -86,7 +86,7 @@ fun TimePickerDialog(
                     onConfirmClick(LocalTime.of(_hour, minute))
                     onDismissRequest()
                 }) {
-                    Text(text = stringResource(id = R.string.ok))
+                    Text(text = stringResource(id = R.string.set))
                 }
             }
         }
