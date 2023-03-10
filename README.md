@@ -1,4 +1,5 @@
 # SevenDays
+<img src="img/sevendays_512" width="300" height="300">
 
 (개발 중)
 
