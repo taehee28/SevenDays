@@ -1,5 +1,7 @@
 # SevenDays
-<img src="./img/sevendays_512.png" width="300" height="300">
+<p align="center">
+    <img src="./img/sevendays_512.png" width="200" height="200">
+</p>
 
 (개발 중)
 
