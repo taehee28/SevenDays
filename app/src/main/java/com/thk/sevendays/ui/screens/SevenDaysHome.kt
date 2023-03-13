@@ -2,6 +2,7 @@ package com.thk.sevendays.ui.screens
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -30,6 +31,7 @@ import com.thk.sevendays.ui.theme.SevenDaysAppTheme
 import com.thk.sevendays.ui.viewmodels.ChallengeViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalComposeUiApi
@@ -39,7 +41,6 @@ fun SevenDaysHome(
     onSettingsClick: () -> Unit,
     viewModel: ChallengeViewModel = hiltViewModel()
 ) {
-    val challenges by viewModel.challenges.collectAsState()
     val (showDialog, setShowDialog) = remember { mutableStateOf(false) }
 
     Scaffold(
@@ -63,6 +64,10 @@ fun SevenDaysHome(
             }
         }
     ) {
+        val challenges by viewModel.challenges.collectAsState()
+        val scrollState = rememberLazyListState()
+        val scope = rememberCoroutineScope()
+
         if (challenges == null) {
             Box(
                 contentAlignment = Alignment.Center,
@@ -91,6 +96,7 @@ fun SevenDaysHome(
 
             ChallengeList(
                 challenges = challenges ?: emptyList(),
+                scrollState = scrollState,
                 onChallengeClick = onChallengeClick,
                 onRemoveChallenge = viewModel::removeChallenge
             )
@@ -99,7 +105,10 @@ fun SevenDaysHome(
         AnimatedVisibility(visible = showDialog) {
             AddChallengeDialog(
                 setShowDialog = setShowDialog,
-                onAddChallenge = viewModel::addChallenge
+                onAddChallenge = { title ->
+                    viewModel.addChallenge(title)
+                    scope.launch { scrollState.animateScrollToItem(0) }
+                }
             )
         }
     }

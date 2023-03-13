@@ -7,7 +7,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -30,10 +32,15 @@ import java.time.LocalDate
 @Composable
 fun ChallengeList(
     challenges: List<Challenge>,
+    scrollState: LazyListState,
     onChallengeClick: (Long) -> Unit,
     onRemoveChallenge: ((Long) -> Unit)? = null
 ) {
-    LazyColumn(contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 72.dp), modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(
+        state = scrollState,
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 72.dp),
+        modifier = Modifier.fillMaxHeight()
+    ) {
         items(
             items = challenges,
             key = { it.challengeId }
@@ -160,7 +167,8 @@ private fun CardContent(
 private fun ChallengeListPreview() {
     MaterialTheme {
         ChallengeList(
-            sampleChallengeList,
+            challenges = sampleChallengeList,
+            scrollState = rememberLazyListState(),
             onChallengeClick = {}
         )
     }
