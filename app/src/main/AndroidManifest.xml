@@ -7,9 +7,9 @@
     <application
         android:name=".di.SevenDaysApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_sevendays_launcher"
+        android:icon="@mipmap/ic_sevendays_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_sevendays_launcher"
+        android:roundIcon="@mipmap/ic_sevendays_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SevenDays">
         <activity
