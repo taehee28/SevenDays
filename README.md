@@ -1,6 +1,12 @@
 # SevenDays
 <p align="center">
-    <img src="./img/sevendays_512.png" width="200" height="200">
+    <img src="./img/sevendays_fulllogo.png" height="250">
+</p>
+
+<p align="center">
+    <img src="./img/screenshots/sevendays_home_dark.png" width="260">
+    <img src="./img/screenshots/sevendays_home_light.png" width="260">
+    <img src="./img/screenshots/sevendays_stamps.png" width="260">
 </p>
 
 (개발 중)
