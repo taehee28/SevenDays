@@ -22,7 +22,7 @@
     <string name="settings">설정</string>
     <string name="settings_section_alarm">알림</string>
     <string name="settings_get_alarm">알림 받기</string>
-    <string name="settings_get_alarm_description">스탬프 찍는 것을 잊지 않도록 정해진 시간에 알림을 보냅니다.</string>
+    <string name="settings_get_alarm_description">스탬프를 찍는 것을 잊지 않도록 알림을 보냅니다.</string>
     <string name="settings_select_alarm_time">알림 시간 선택</string>
     <string name="am">오전</string>
     <string name="pm">오후</string>
