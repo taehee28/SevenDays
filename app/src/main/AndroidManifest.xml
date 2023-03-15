@@ -7,9 +7,9 @@
     <application
         android:name=".di.SevenDaysApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_sevendays_logo"
+        android:icon="@mipmap/ic_sevendays_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_sevendays_logo"
+        android:roundIcon="@mipmap/ic_sevendays_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SevenDays">
         <activity
@@ -19,9 +19,9 @@
             android:theme="@style/Theme.SevenDays.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-
+            </intent-filter>
+            <intent-filter>
                 <data android:scheme="svd" android:host="sevendays"/>
             </intent-filter>
         </activity>
