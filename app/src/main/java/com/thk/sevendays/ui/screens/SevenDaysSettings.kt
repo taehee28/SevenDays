@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.thk.sevendays.R
 import com.thk.sevendays.ui.components.Section
 import com.thk.sevendays.ui.components.SwitchPref
@@ -41,8 +42,8 @@ fun SettingsScreen(
     onBackClick: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
-    val alarmState by viewModel.alarmState.collectAsState()
-    val alarmTime by viewModel.alarmTime.collectAsState()
+    val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
+    val alarmTime by viewModel.alarmTime.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
