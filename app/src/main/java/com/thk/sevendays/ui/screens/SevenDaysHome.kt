@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.thk.sevendays.ui.components.ChallengeList
 import com.thk.data.model.Challenge
 import com.thk.data.model.sampleChallengeList
@@ -64,7 +65,7 @@ fun SevenDaysHome(
             }
         }
     ) {
-        val challenges by viewModel.challenges.collectAsState()
+        val challenges by viewModel.challenges.collectAsStateWithLifecycle()
         val scrollState = rememberLazyListState()
         val scope = rememberCoroutineScope()
 

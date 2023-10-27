@@ -12,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.thk.data.logd
 import com.thk.data.model.Challenge
 import com.thk.data.model.Stamp
@@ -31,7 +32,7 @@ fun ChallengeDetailScreen(
     viewModel: StampViewModel = hiltViewModel()
 ) {
     val challenge: Challenge? by viewModel.challenge
-    val stamps: List<Stamp> by viewModel.stamps.collectAsState()
+    val stamps: List<Stamp> by viewModel.stamps.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadChallengeData(id)
